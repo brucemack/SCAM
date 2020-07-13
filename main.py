@@ -32,22 +32,22 @@ c = tk.Canvas(root, bg="#b87333", width=size[0] * ppmm, height=size[1] * ppmm)
 # an external file once we are finished.
 e = Compound()
 # Top grid
-e.add((32, 80), Grid(6, 1))
+e.add((30, 80), Grid(6, 1))
 # Top amp
-e.add((12, 65), Grid(4, 2))
-e.add((12, 45), Grid(4, 2))
-e.add((40, 50), Dip14(True))
+e.add((8, 65), Grid(4, 2))
+e.add((8, 45), Grid(4, 2))
+e.add((36, 50), Dip14(True))
 e.add((64, 65), Grid(4, 2))
 e.add((64, 45), Grid(4, 2))
 # Bottom amp
-e.add((12, 25), Grid(4, 2))
-e.add((12, 5), Grid(4, 2))
-e.add((40, 10), Dip14(True))
+e.add((8, 25), Grid(4, 2))
+e.add((8, 5), Grid(4, 2))
+e.add((36, 10), Dip14(True))
 e.add((64, 25), Grid(4, 2))
 e.add((64, 5), Grid(4, 2))
 # Extra stuff
-e.add((12, 90), AmpLM386())
-e.add((50, 90), ADE1())
+e.add((12, 100), AmpLM386())
+e.add((50, 100), ADE1())
 # -----------------------------------------------------------------
 
 # Draw on the screen

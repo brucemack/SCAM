@@ -10,7 +10,7 @@ class Dip14(Compound):
     # A common component used to create the layout for a DIP-14 package
 
     pitch_mm = 2.54
-    width_mm = 20
+    width_mm = 25
 
     def __init__(self, ground_pin= False):
         super().__init__()

@@ -10,7 +10,7 @@ class ADE1(Compound):
     # A common component used to create the layout for an ADE-1 mixer.
 
     pitch_mm = 2.54
-    width_mm = 20
+    width_mm = 25
 
     def __init__(self, ground_pin= False):
         super().__init__()

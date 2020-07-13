@@ -11,7 +11,7 @@ class AmpLM386(Compound):
     # A common component used to create the layout for an LM386 audio amplifier.
 
     pitch_mm = 2.54
-    width_mm = 20
+    width_mm = 25
 
     def __init__(self, ground_pin= False):
         super().__init__()
