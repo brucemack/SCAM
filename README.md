@@ -6,4 +6,10 @@ Contact
 =======
 Bruce MacKinnon KC1FSZ
 
+Design:
+
 ![Alt](docs/l1.png)
+
+Output board:
+
+![Alt](docs/IMG1.jpg)
