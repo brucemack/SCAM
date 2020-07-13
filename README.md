@@ -12,4 +12,4 @@ Design:
 
 Output board:
 
-![Alt](docs/IMG1.jpg)
+![Alt](docs/img1.jpg)
