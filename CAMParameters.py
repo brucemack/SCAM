@@ -9,5 +9,6 @@ class CAMParameters:
     feedrate_xy = 70
     safe_z = 10
     board_w = 150
-    board_h = 150
+    board_h = 100
     passes = 3
+
