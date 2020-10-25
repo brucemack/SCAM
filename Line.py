@@ -21,20 +21,31 @@ class Line(Element):
                            fill=color)
 
     def mill(self, gcode_stream, origin_x_mm, origin_y_mm, depth_mm, params):
+        # Determine the z depth for each pass
         z_inc = depth_mm / params.passes
-        z = z_inc
+        z = 0
         for p in range(params.passes):
+            # Increase the depth
+            z = z + z_inc
             gcode_stream.comment("Pass " + str(p) + " at depth " + str(z))
-            # Position the tool (Rapid)
-            gcode_stream.out("G00 X" + gcode_stream.dec4(origin_x_mm + self.start_point[0]) + " Y" +
-                             gcode_stream.dec4(origin_y_mm + self.start_point[1]))
+            start_point = origin_x_mm + self.start_point[0], origin_y_mm + self.start_point[1]
+            end_point = origin_x_mm + self.end_point[0], origin_y_mm + self.end_point[1]
+            # Dean KK4DAS has suggested that milling in the -Y direction (towards the
+            # bottom of the work piece looking down on it) may have problems
+            # on the CNC 3018 so we adjust the direction of work accordingly
+            if start_point[1] > end_point[1]:
+                hold = start_point
+                start_point = end_point
+                end_point = hold
+            # Position the tool at the start (Rapid)
+            gcode_stream.out("G00 X" + gcode_stream.dec4(start_point[0]) + " Y" +
+                             gcode_stream.dec4(start_point[1]))
             # Put the tool into the piece
             gcode_stream.out("G01 F" + gcode_stream.dec4(params.feedrate_z))
             gcode_stream.out("G01 Z" + gcode_stream.dec4(z))
-            # Mill
+            # Mill to the end point
             gcode_stream.out("G01 F" + gcode_stream.dec4(params.feedrate_xy))
-            gcode_stream.out("G01 X" + gcode_stream.dec4(origin_x_mm + self.end_point[0]) + " Y" +
-                             gcode_stream.dec4(origin_y_mm + self.end_point[1]))
+            gcode_stream.out("G01 X" + gcode_stream.dec4(end_point[0]) + " Y" +
+                             gcode_stream.dec4(end_point[1]))
             # Pull the tool out of the piece
             gcode_stream.out("G00 Z" + gcode_stream.dec4(params.travel_z))
-            z = z + z_inc
