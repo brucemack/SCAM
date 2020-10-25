@@ -11,3 +11,9 @@ class RenderParameters:
         # ppmm is pixels per millimeter (used for rendering)
         self.pixelsPerMm = ppmm
         self.height = cam_parameters.board_h * ppmm
+        self.width = cam_parameters.board_w * ppmm
+
+    def u2px(self, units):
+        # Converts dimensional units (i.e. mm) to pixels
+        return int(round(units * self.pixelsPerMm * self.scaling))
+

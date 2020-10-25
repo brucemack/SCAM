@@ -11,4 +11,6 @@ class CAMParameters:
     board_w = 150
     board_h = 100
     passes = 3
+    # The size (mm) of the corner area to avoid
+    corner_sie = 5
 

@@ -10,6 +10,8 @@ from Components.Grid import Grid
 from Components.AmpLM386 import AmpLM386
 from Components.ADE1 import ADE1
 from Components.SA612 import SA612
+from Components.Trace import Trace
+from Components.DBM import DBM
 from GcodeStream import GcodeStream
 from CAMParameters import CAMParameters
 from RenderParameters import RenderParameters
@@ -19,6 +21,12 @@ from utils import *
 def motion(event):
     x, y = event.x, event.y
     print('{}, {}'.format(x, y))
+
+
+def render_corners(canvas, origin_x, origin_y, color, render_params):
+    canvas.create_rectangle(0, 0, render_params.u2px(7), render_params.u2px(7), fill="red")
+    canvas.create_rectangle(0, render_params.height - render_params.u2px(7),
+        render_params.u2px(7), render_params.height, fill="red")
 
 
 root = tk.Tk()
@@ -62,10 +70,21 @@ e.add((50, 10), DIP(14, True))
 e.add((80, 10), AmpLM386())
 e.add((120, 10), ADE1())
 """
-e.add((30, 30), SA612(rotation_ccw=-90))
+
+# ---- DSB Transmitter -------------------------------------
+e.add((10, 0), Trace(5, 5, rotation_ccw=0))
+e.add((20, 0), Trace(110, 5, rotation_ccw=0))
+# Mic amp
+e.add((0, 10), Grid(3, 3))
+# Mixer
+e.add((25, 10), DBM(rotation_ccw=0))
+# RF amp
+e.add((75, 10), Grid(3, 4))
+e.add((110, 10), Grid(3, 4))
 
 # -----------------------------------------------------------------
 # Draw on the screen
+render_corners(c, 0, 0, "#ff0000", render_params)
 e.render(c, 0, 0, "#ffffff", render_params)
 c.pack()
 
@@ -84,7 +103,7 @@ gcs.out("G94")
 gcs.out("M03 S10000")
 
 cp = CAMParameters()
-e.mill(gcs, 0, 5, depth, cp)
+e.mill(gcs, 0, 0, depth, cp)
 
 # Pull out the tool at the end of the work
 gcs.comment("Park")
