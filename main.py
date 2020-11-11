@@ -12,6 +12,8 @@ from Components.ADE1 import ADE1
 from Components.SA612 import SA612
 from Components.Trace import Trace
 from Components.DBM import DBM
+from Components.SC70 import SC70
+from Components.SC70a import SC70a
 from GcodeStream import GcodeStream
 from CAMParameters import CAMParameters
 from RenderParameters import RenderParameters
@@ -70,7 +72,7 @@ e.add((50, 10), DIP(14, True))
 e.add((80, 10), AmpLM386())
 e.add((120, 10), ADE1())
 """
-
+"""
 # ---- DSB Transmitter -------------------------------------
 e.add((10, 0), Trace(5, 5, rotation_ccw=0))
 e.add((20, 0), Trace(110, 5, rotation_ccw=0))
@@ -81,6 +83,13 @@ e.add((25, 10), DBM(rotation_ccw=0))
 # RF amp
 e.add((75, 10), Grid(3, 4))
 e.add((110, 10), Grid(3, 4))
+"""
+
+# ----- MAX4466 Mic Amp --------------------------------------
+
+e.add((10, 5), Grid(3, 3))
+e.add((30, 10), SC70a(rotation_ccw=0))
+e.add((10, 25), Trace(30, 5, rotation_ccw=0))
 
 # -----------------------------------------------------------------
 # Draw on the screen
