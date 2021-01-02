@@ -18,7 +18,6 @@ class ADE1(Compound):
         self.rotation_ccw = rotation_ccw
 
         # Horizontal lines
-        # self.add(self.NO_OFFSET, Line(0, 0, 0.5 * self.width_mm, 0))
         start_point = rotate((0, 0), rotation_ccw)
         end_point = rotate((0.5 * self.width_mm, 0), rotation_ccw)
         self.add(self.NO_OFFSET, Line(start_point, end_point))

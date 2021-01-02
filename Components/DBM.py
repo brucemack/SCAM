@@ -8,7 +8,8 @@ from utils import *
 
 
 class DBM(Compound):
-    # A common component used to create the layout for a grid pattern.
+    # A common component used to create the layout for a double-balanced
+    # diode ring mixer.
 
     pitch_mm = 8
 

@@ -9,6 +9,8 @@ from Components.DIP import DIP
 from Components.Grid import Grid
 from Components.AmpLM386 import AmpLM386
 from Components.ADE1 import ADE1
+from Components.MAX2650 import MAX2650
+from Components.FeedbackAmp import FeedbackAmp
 from Components.SA612 import SA612
 from Components.Trace import Trace
 from Components.DBM import DBM
@@ -85,11 +87,37 @@ e.add((75, 10), Grid(3, 4))
 e.add((110, 10), Grid(3, 4))
 """
 
+"""
 # ----- MAX4466 Mic Amp --------------------------------------
 
 e.add((10, 5), Grid(3, 3))
 e.add((30, 10), SC70a(rotation_ccw=0))
 e.add((10, 25), Trace(30, 5, rotation_ccw=0))
+"""
+"""
+# ----- Mixer with Buffers --------------------------------------
+
+# Bus
+#e.add((10, 2), Trace(50, 3, rotation_ccw=0))
+
+#e.add((5, 24), Grid(3, 3))
+#e.add((30, 24), Grid(3, 3))
+#e.add((55, 24), Grid(3, 3))
+e.add((2, 12), MAX2650())
+e.add((26, 12), ADE1())
+e.add((54, 12), MAX2650())
+"""
+# -----------------------------------------------------------------
+# Mixer with Buffers
+
+e.add((2, 10), Grid(1, 3))
+e.add((10, 2), ADE1())
+e.add((20, 15), Grid(2, 2))
+e.add((38, 2), FeedbackAmp())
+e.add((62, 2), Grid(1, 2))
+e.add((70, 2), FeedbackAmp())
+
+e.add((15, 30), Trace(80, 5, rotation_ccw=0))
 
 # -----------------------------------------------------------------
 # Draw on the screen
