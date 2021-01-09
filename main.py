@@ -16,6 +16,10 @@ from Components.Trace import Trace
 from Components.DBM import DBM
 from Components.SC70 import SC70
 from Components.SC70a import SC70a
+from Components.GALI3_Biased import GALI3_Biased
+from Components.PA_1 import PA_1
+from Components.PA_2 import PA_2
+
 from GcodeStream import GcodeStream
 from CAMParameters import CAMParameters
 from RenderParameters import RenderParameters
@@ -107,6 +111,8 @@ e.add((2, 12), MAX2650())
 e.add((26, 12), ADE1())
 e.add((54, 12), MAX2650())
 """
+
+"""
 # -----------------------------------------------------------------
 # Mixer with Buffers
 
@@ -114,10 +120,36 @@ e.add((2, 10), Grid(1, 3))
 e.add((10, 2), ADE1())
 e.add((20, 15), Grid(2, 2))
 e.add((38, 2), FeedbackAmp())
-e.add((62, 2), Grid(1, 2))
+e.add((61, 2), Grid(1, 2))
 e.add((70, 2), FeedbackAmp())
 
 e.add((15, 30), Trace(80, 5, rotation_ccw=0))
+"""
+"""
+# -----------------------------------------------------------------
+# GALI3+ and BJT Amp
+
+e.add((10, 12), GALI3_Biased())
+e.add((5, 22), Grid(2, 2))
+e.add((35, 2), FeedbackAmp())
+e.add((10, 40), Trace(50, 5, rotation_ccw=0))
+"""
+
+# -----------------------------------------------------------------
+# Power Amp
+
+e.add((80, 10), PA_1())
+e.add((80, 35), PA_1())
+
+e.add((50, 10), PA_2())
+e.add((60, 40), Grid(2, 1))
+e.add((45, 40), Grid(2, 1))
+
+e.add((20, 10), FeedbackAmp())
+
+e.add((10, 15), Grid(1, 1))
+
+e.add((10, 50), Trace(65, 5, rotation_ccw=0))
 
 # -----------------------------------------------------------------
 # Draw on the screen

@@ -48,4 +48,5 @@ class Line(Element):
             gcode_stream.out("G01 X" + gcode_stream.dec4(end_point[0]) + " Y" +
                              gcode_stream.dec4(end_point[1]))
             # Pull the tool out of the piece
+            gcode_stream.out("G01 F" + gcode_stream.dec4(params.feedrate_z_out))
             gcode_stream.out("G00 Z" + gcode_stream.dec4(params.travel_z))
