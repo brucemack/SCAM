@@ -19,6 +19,8 @@ from Components.SC70a import SC70a
 from Components.GALI3_Biased import GALI3_Biased
 from Components.PA_1 import PA_1
 from Components.PA_2 import PA_2
+from Components.PA_3 import PA_3
+from Components.PA_4 import PA_4
 
 from GcodeStream import GcodeStream
 from CAMParameters import CAMParameters
@@ -134,22 +136,26 @@ e.add((5, 22), Grid(2, 2))
 e.add((35, 2), FeedbackAmp())
 e.add((10, 40), Trace(50, 5, rotation_ccw=0))
 """
-
+"""
 # -----------------------------------------------------------------
-# Power Amp
+# Power Amp (WORKING!)
 
 e.add((80, 10), PA_1())
 e.add((80, 35), PA_1())
 
-e.add((50, 10), PA_2())
-e.add((60, 40), Grid(2, 1))
-e.add((45, 40), Grid(2, 1))
+e.add((30, 8), PA_3())
+e.add((30, 38), Grid(1, 1))
 
-e.add((20, 10), FeedbackAmp())
+e.add((2, 10), FeedbackAmp())
 
-e.add((10, 15), Grid(1, 1))
+e.add((10, 50), Trace(60, 5, rotation_ccw=0))
 
-e.add((10, 50), Trace(65, 5, rotation_ccw=0))
+e.add((10, 58), Grid(2, 1))
+"""
+# -----------------------------------------------------------------
+# Power Amp Output
+
+e.add((10, 15), PA_4())
 
 # -----------------------------------------------------------------
 # Draw on the screen
@@ -158,8 +164,8 @@ e.render(c, 0, 0, "#ffffff", render_params)
 c.pack()
 
 # Generate g-code onto the lab computer for milling
-gcs = GcodeStream("/tmp/pi4/out.nc")
-#gcs = GcodeStream("./out.nc")
+#gcs = GcodeStream("/tmp/pi4/out.nc")
+gcs = GcodeStream("./out.nc")
 gcs.comment("SCAM G-Code Generator")
 gcs.comment("Bruce MacKinnon KC1FSZ")
 # Units in mm

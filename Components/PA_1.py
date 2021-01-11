@@ -25,11 +25,15 @@ class PA_1(Compound):
         end_point = rotate((4 * self.pitch_mm, 2 * self.pitch_mm), rotation_ccw)
         self.add(self.NO_OFFSET, Line(start_point, end_point))
 
-        start_point = rotate((0 * self.pitch_mm, 3 * self.pitch_mm), rotation_ccw)
+        start_point = rotate((-0.5 * self.pitch_mm, 3 * self.pitch_mm), rotation_ccw)
+        end_point = rotate((2 * self.pitch_mm, 3 * self.pitch_mm), rotation_ccw)
+        self.add(self.NO_OFFSET, Line(start_point, end_point))
+
+        start_point = rotate((3 * self.pitch_mm, 3 * self.pitch_mm), rotation_ccw)
         end_point = rotate((4 * self.pitch_mm, 3 * self.pitch_mm), rotation_ccw)
         self.add(self.NO_OFFSET, Line(start_point, end_point))
 
-        start_point = rotate((0 * self.pitch_mm, 4 * self.pitch_mm), rotation_ccw)
+        start_point = rotate((-0.5 * self.pitch_mm, 4 * self.pitch_mm), rotation_ccw)
         end_point = rotate((4 * self.pitch_mm, 4 * self.pitch_mm), rotation_ccw)
         self.add(self.NO_OFFSET, Line(start_point, end_point))
 
@@ -39,8 +43,8 @@ class PA_1(Compound):
         end_point = rotate((0 * self.pitch_mm, 2 * self.pitch_mm), rotation_ccw)
         self.add(self.NO_OFFSET, Line(start_point, end_point))
 
-        start_point = rotate((0 * self.pitch_mm, 3 * self.pitch_mm), rotation_ccw)
-        end_point = rotate((0 * self.pitch_mm, 4 * self.pitch_mm), rotation_ccw)
+        start_point = rotate((-0.5 * self.pitch_mm, 3 * self.pitch_mm), rotation_ccw)
+        end_point = rotate((-0.5 * self.pitch_mm, 4 * self.pitch_mm), rotation_ccw)
         self.add(self.NO_OFFSET, Line(start_point, end_point))
 
         start_point = rotate((1 * self.pitch_mm, 3 * self.pitch_mm), rotation_ccw)

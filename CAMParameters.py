@@ -10,7 +10,7 @@ class CAMParameters:
     # This is the speed used to remove the tool from the work
     feedrate_z_out = 100
     # Changed this from 70 on 9-Nov-2020
-    feedrate_xy = 100
+    feedrate_xy = 120
     safe_z = 10
     board_w = 100
     board_h = 70
