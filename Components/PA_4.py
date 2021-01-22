@@ -11,39 +11,51 @@ class PA_4(Compound):
     """
     This is the output side of the IRF510 push-pull PA
     """
-    pitch_mm = 5
+    pitch_mm = 10
 
     def line(self, start, end):
         start_point = rotate((start[0] * self.pitch_mm, start[1] * self.pitch_mm), self.rotation_ccw)
         end_point = rotate((end[0] * self.pitch_mm, end[1] * self.pitch_mm), self.rotation_ccw)
         self.add(self.NO_OFFSET, Line(start_point, end_point))
 
+    def square(self, start, size):
+        self.line(start, (start[0] + size[0], start[1]))
+        self.line((start[0], start[1] + size[1]), (start[0] + size[0], start[1] + size[1]))
+        self.line((start[0], start[1]), (start[0], start[1] + size[1]))
+        self.line((start[0] + size[0], start[1]), (start[0] + size[0], start[1] + size[1]))
+
     def __init__(self, rotation_ccw=0):
         super().__init__()
         self.rotation_ccw = rotation_ccw
 
         # Horizontal lines
-        self.line((5, 0), (10, 0))
-        self.line((5, 1), (8, 1))
-        self.line((0, 1.5), (7, 1.5))
-        self.line((0, 3.5), (7, 3.5))
-        self.line((0, 4), (7, 4))
-        self.line((0, 6), (7, 6))
-        self.line((5, 6.5), (8, 6.5))
-        self.line((5, 7.5), (8, 7.5))
+        self.line((0, 0.5), (3, 0.5))
+        self.line((0, 1.5), (3, 1.5))
 
-        self.line((5, 0), (5, 1))
-        self.line((5, 6.5), (5, 7.5))
-        self.line((8, 1), (8, 6.5))
-        self.line((8, 7.5), (8, 10))
-        self.line((10, 0), (10, 10))
+        self.line((0, 2), (4, 2))
+        self.line((0, 2.5), (3.5, 2.5))
 
-        self.line((0, 1.5), (0, 3.5))
-        self.line((0, 4), (0, 6))
-        self.line((7, 1.5), (7, 3.5))
-        self.line((7, 4), (7, 6))
+        self.line((0, 3.0), (3, 3.0))
+        self.line((0, 4.0), (3, 4.0))
 
+        self.line((3, 5.0), (3.5, 5.0))
+        self.line((4, 5.0), (4.5, 5.0))
+        self.line((3, 6.0), (4.5, 6.0))
 
+        # Vertical
+        self.line((3, 0.5), (3, 1.5))
+        self.line((3, 3), (3, 4))
+        self.line((3.5, 2.5), (3.5, 5.0))
+        self.line((4, 2.0), (4, 5.0))
+        self.line((3, 5), (3, 6))
+        self.line((4.5, 5), (4.5, 6))
+
+        self.square((6.5, 0.5), (1, 1))
+        self.square((8.0, 0.5), (0.5, 0.5))
+        self.square((7, 2.5), (0.5, 0.5))
+        self.square((7, 4.0), (0.5, 0.5))
+        self.square((7, 5.5), (0.5, 0.5))
+        self.square((8, 5.5), (0.5, 0.5))
 
     def render(self, canvas, origin_x_mm, origin_y_mm, color, params):
         # Normal renedering process

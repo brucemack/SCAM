@@ -12,8 +12,8 @@ class CAMParameters:
     # Changed this from 70 on 9-Nov-2020
     feedrate_xy = 120
     safe_z = 10
-    board_w = 100
-    board_h = 70
+    board_w = 250
+    board_h = 137
     passes = 3
     # The size (mm) of the corner area to avoid
     corner_sie = 8

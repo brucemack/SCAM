@@ -5,6 +5,7 @@ import tkinter as tk
 from Compound import Compound
 from Line import Line
 from Element import Element
+from Rectangle import Rectangle
 from Components.DIP import DIP
 from Components.Grid import Grid
 from Components.AmpLM386 import AmpLM386
@@ -37,6 +38,10 @@ def render_corners(canvas, origin_x, origin_y, color, render_params):
     canvas.create_rectangle(0, 0, render_params.u2px(7), render_params.u2px(7), fill="red")
     canvas.create_rectangle(0, render_params.height - render_params.u2px(7),
         render_params.u2px(7), render_params.height, fill="red")
+
+
+def s(point_x, point_y):
+    return point_x, point_y
 
 
 root = tk.Tk()
@@ -155,7 +160,24 @@ e.add((10, 58), Grid(2, 1))
 # -----------------------------------------------------------------
 # Power Amp Output
 
-e.add((10, 15), PA_4())
+#e.add((0, 5), PA_4())
+
+# -----------------------------------------------------------------
+# WA2EBY Power Amp Output
+
+rects = []
+rects.append(Rectangle(s(22, 14), s(74, 17)))
+rects.append(Rectangle(s(22, 14), s(24, 31)))
+rects.append(Rectangle(s(22, 23), s(70, 25)))
+rects.append(Rectangle(s(22, 23), s(31, 31)))
+rects.append(Rectangle(s(22, 29), s(70, 31)))
+rects.append(Rectangle(s(42, 23), s(53, 31)))
+
+
+
+
+for rect in rects:
+    e.add((0, 0), rect)
 
 # -----------------------------------------------------------------
 # Draw on the screen
