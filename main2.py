@@ -1,4 +1,5 @@
 import tkinter as tk
+import tkinter.font as TkFont
 
 root = tk.Tk()
 root.title("SCAM v0.3 2020-10-22 KC1FSZ")
@@ -9,25 +10,37 @@ board_w = 450
 board_h = 300
 grid_x = 3
 grid_y = 5
+px_per_mm = 11.3
 
 last_hair_point = None
 hair_line_v = None
 hair_line_h = None
+hair_text = None
 
 c = tk.Canvas(root, width=board_w * ppmm, height=board_h * ppmm)
-
+helv36 = TkFont.Font(family='Helvetica',
+                     size=28, weight='bold')
 
 def draw_hair(point):
-    global hair_line_h, hair_line_v
+    global hair_line_h, hair_line_v, hair_text
     # Undraw
     if hair_line_v is not None:
         c.delete(hair_line_v)
     if hair_line_h is not None:
         c.delete(hair_line_h)
+    if hair_text is not None:
+        c.delete(hair_text)
     # Redraw
     hair_line_v = c.create_line((point[0], 0), (point[0], board_h * ppmm), fill="white")
     hair_line_h = c.create_line((0, point[1]), (board_w * ppmm, point[1]), fill="white")
-
+    cue = str(point[0]) + ", " + str(point[1]) + ", (" + "{:.2f}".format(point[0] / px_per_mm) + "mm, " + \
+        "{:.2f}".format(point[1] / px_per_mm) + "mm)"
+    hair_text = c.create_text(
+                        point[0], point[1],
+                       anchor=tk.SE,
+                       text=cue,
+                        font=helv36,
+                       fill='white')
 
 img = tk.PhotoImage(file="~/Downloads/ampboard1.gif")
 img = img.zoom(8)
