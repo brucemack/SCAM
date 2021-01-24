@@ -1,5 +1,12 @@
 import tkinter as tk
 import tkinter.font as TkFont
+from utils import *
+from GcodeStream import GcodeStream
+from CAMParameters import CAMParameters
+
+cp = CAMParameters()
+depth = -0.25
+tool_size_mm = 1.0
 
 root = tk.Tk()
 root.title("SCAM v0.3 2020-10-22 KC1FSZ")
@@ -21,6 +28,13 @@ c = tk.Canvas(root, width=board_w * ppmm, height=board_h * ppmm)
 helv36 = TkFont.Font(family='Helvetica',
                      size=28, weight='bold')
 
+
+def convert_pixel_to_mm(pixel_point, cam_params):
+    """ Converts a point in the screen pixel coordinates to a point
+        in work mm coordinates. """
+    return (pixel_point[0] / px_per_mm), (cam_params.board_h - (pixel_point[1] / px_per_mm))
+
+
 def draw_hair(point):
     global hair_line_h, hair_line_v, hair_text
     # Undraw
@@ -33,14 +47,12 @@ def draw_hair(point):
     # Redraw
     hair_line_v = c.create_line((point[0], 0), (point[0], board_h * ppmm), fill="white")
     hair_line_h = c.create_line((0, point[1]), (board_w * ppmm, point[1]), fill="white")
-    cue = str(point[0]) + ", " + str(point[1]) + ", (" + "{:.2f}".format(point[0] / px_per_mm) + "mm, " + \
-        "{:.2f}".format(point[1] / px_per_mm) + "mm)"
-    hair_text = c.create_text(
-                        point[0], point[1],
-                       anchor=tk.SE,
-                       text=cue,
-                        font=helv36,
-                       fill='white')
+    point_mm = convert_pixel_to_mm(point, cp)
+    cue = str(point[0]) + ", " + str(point[1]) + ", (" + "{:.2f}".format(point_mm[0]) + "mm, " + \
+        "{:.2f}".format(point_mm[1]) + "mm)"
+    hair_text = c.create_text(point[0], point[1], anchor=tk.SE, text=cue, font=helv36,
+        fill='white')
+
 
 img = tk.PhotoImage(file="~/Downloads/ampboard1.gif")
 img = img.zoom(8)
@@ -111,6 +123,14 @@ class Rect:
         self.selected = False
         self.shape = None
 
+    def is_horizontal(self):
+        """ Returns True if the rectangle's dominant dimension is in the
+            x (horizontal) direction.  This is used to figure out the
+            milling pattern for the area. """
+        dx = math.fabs(self.end[0] - self.start[0])
+        dy = math.fabs(self.end[1] - self.start[1])
+        return dx >= dy
+
     def contains_point(self, point):
         return (point[0] >= self.start[0]) and \
             (point[0] <= self.end[0]) and \
@@ -132,7 +152,6 @@ class Rect:
             fill_color = color
         self.shape = c.create_rectangle(self.start[0], self.start[1],
             self.end[0], self.end[1], fill=fill_color, outline=color, width="2")
-
 
 
 def start_drag(point):
@@ -219,11 +238,66 @@ def delete_key(event):
     # Remove from list
     rect_list = [rect for rect in rect_list if not rect.selected]
 
+
 def toggle_fill(event):
     global fill
     fill = not fill
     render_all()
 
+
+def generate_gcode(event):
+
+    print("Generating GCODE")
+
+    z = depth
+
+    # gcs = GcodeStream("/tmp/pi4/out.nc")
+    gcs = GcodeStream("./out.gcode")
+    gcs.comment("SCAM G-Code Generator")
+    gcs.comment("Bruce MacKinnon KC1FSZ")
+    # Units in mm
+    gcs.out("G21")
+    # Absolute distance mode
+    gcs.out("G90")
+    # Units per minute feed rate mode
+    gcs.out("G94")
+    # Spindle speed
+    gcs.out("M03 S10000")
+
+    # Mill each rectangle individually.  The tool is removed from
+    # the work at the end of the milling to be ready for movement
+    # to the next rectangle
+    for rect in rect_list:
+        gcs.comment("Rectangle [" + str(rect.start[0]) + ", " + str(rect.start[1]) + "] -> [" +
+                    str(rect.end[0]) + ", " + str(rect.end[1]) + "]")
+        bottom_left_mm = convert_pixel_to_mm(rect.start, cp)
+        top_right_mm = convert_pixel_to_mm(rect.end, cp)
+
+        # Convert the corners of the rectangle into a set of milling passes
+        if rect.is_horizontal():
+            gcs.comment("Horizontal")
+            mill_points = mill_calc_h(bottom_left_mm, top_right_mm, tool_size_mm)
+        else:
+            gcs.comment("Vertical")
+            mill_points = mill_calc_v(bottom_left_mm, top_right_mm, tool_size_mm)
+        # Position the tool at the starting point (rapid)
+        gcs.out("G00 X" + gcs.dec4(mill_points[0][0]) + " Y" + gcs.dec4(mill_points[0][1]))
+        # Put the tool into the piece
+        gcs.out("G01 F" + gcs.dec4(cp.feedrate_z))
+        gcs.out("G01 Z" + gcs.dec4(z))
+        # Mill to each point in the list
+        for p in range(1, len(mill_points)):
+            gcs.out("G01 F" + gcs.dec4(cp.feedrate_xy))
+            gcs.out("G01 X" + gcs.dec4(mill_points[p][0]) + " Y" + gcs.dec4(mill_points[p][1]))
+        # Pull the tool out of the piece
+        gcs.out("G01 F" + gcs.dec4(cp.feedrate_z_out))
+        gcs.out("G00 Z" + gcs.dec4(cp.travel_z))
+
+    # Pull out the tool at the end of the work
+    gcs.comment("Park")
+    gcs.out("G00 Z" + gcs.dec4(cp.safe_z))
+    gcs.out("M05")
+    gcs.close()
 
 
 c.bind('<Motion>', motion)
@@ -233,6 +307,7 @@ c.bind("<Shift-ButtonPress-1>", shift_down)
 root.bind("<BackSpace>", delete_key)
 root.bind("s", dump_list)
 root.bind("f", toggle_fill)
+root.bind("g", generate_gcode)
 c.pack()
 
 load_list()
