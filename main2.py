@@ -4,9 +4,14 @@ from utils import *
 from GcodeStream import GcodeStream
 from CAMParameters import CAMParameters
 
+out_file ="./out.gcode"
+
 cp = CAMParameters()
 depth = -0.25
-tool_size_mm = 1.0
+# For etching the top layer
+#tool_size_mm = 1.25
+# For making holes in board:
+tool_size_mm = 2.5
 
 root = tk.Tk()
 root.title("SCAM v0.3 2020-10-22 KC1FSZ")
@@ -26,7 +31,7 @@ hair_text = None
 
 c = tk.Canvas(root, width=board_w * ppmm, height=board_h * ppmm)
 helv36 = TkFont.Font(family='Helvetica',
-                     size=28, weight='bold')
+                     size=18, weight='bold')
 
 
 def convert_pixel_to_mm(pixel_point, cam_params):
@@ -36,7 +41,7 @@ def convert_pixel_to_mm(pixel_point, cam_params):
 
 
 def draw_hair(point):
-    global hair_line_h, hair_line_v, hair_text
+    global hair_line_h, hair_line_v, hair_text, drag, drag_start, drag_end
     # Undraw
     if hair_line_v is not None:
         c.delete(hair_line_v)
@@ -48,9 +53,13 @@ def draw_hair(point):
     hair_line_v = c.create_line((point[0], 0), (point[0], board_h * ppmm), fill="white")
     hair_line_h = c.create_line((0, point[1]), (board_w * ppmm, point[1]), fill="white")
     point_mm = convert_pixel_to_mm(point, cp)
-    cue = str(point[0]) + ", " + str(point[1]) + ", (" + "{:.2f}".format(point_mm[0]) + "mm, " + \
-        "{:.2f}".format(point_mm[1]) + "mm)"
-    hair_text = c.create_text(point[0], point[1], anchor=tk.SE, text=cue, font=helv36,
+    cue = str(point[0]) + ", " + str(point[1]) + ", (" + "{:.1f}".format(point_mm[0]) + "mm, " + \
+        "{:.1f}".format(point_mm[1]) + "mm)"
+    if drag:
+        dx_mm = (drag_end[0] - drag_start[0]) / px_per_mm
+        dy_mm = (drag_end[1] - drag_start[1]) / px_per_mm
+        cue = cue + " dx/dy=[" + "{:.1f}".format(dx_mm) + ", " + "{:.1f}".format(dy_mm) + "]"
+    hair_text = c.create_text(point[0], point[1], anchor=tk.NW, text=cue, font=helv36,
         fill='white')
 
 
@@ -245,16 +254,75 @@ def toggle_fill(event):
     render_all()
 
 
-def generate_gcode(event):
+def generate_gcode_remove(event):
 
-    print("Generating GCODE")
+    # Depth needed to completely remove area
+    depth = -2.5
+    passes = 3
+    dz = depth / passes
+    z = 0
+    pass_number = 0
+
+    gcs = GcodeStream(out_file)
+    gcs.comment("SCAM G-Code Generator")
+    gcs.comment("Bruce MacKinnon KC1FSZ")
+    gcs.comment("Tool size is " + str(tool_size_mm))
+    # Units in mm
+    gcs.out("G21")
+    # Absolute distance mode
+    gcs.out("G90")
+    # Units per minute feed rate mode
+    gcs.out("G94")
+    # Spindle speed
+    gcs.out("M03 S10000")
+
+    # Mill each rectangle individually.  The tool is removed from
+    # the work at the end of the milling to be ready for movement
+    # to the next rectangle
+    for rect in rect_list:
+        z = 0
+        gcs.comment("Rectangle [" + str(rect.start[0]) + ", " + str(rect.start[1]) + "] -> [" +
+                    str(rect.end[0]) + ", " + str(rect.end[1]) + "]")
+        bottom_left_mm = convert_pixel_to_mm(rect.start, cp)
+        top_right_mm = convert_pixel_to_mm(rect.end, cp)
+
+        # Convert the corners of the rectangle into a set of milling passes
+        mill_points = calc_rect_path(bottom_left_mm, top_right_mm, tool_size_mm)
+        # Position the tool at the starting point (rapid)
+        gcs.out("G00 X" + gcs.dec4(mill_points[0][0]) + " Y" + gcs.dec4(mill_points[0][1]))
+        while z > depth:
+            # Lower the tool into the piece
+            z = z + dz
+            gcs.comment("Pass " + str(pass_number) + " depth " + str(z))
+            # Put the tool into the piece
+            gcs.out("G01 F" + gcs.dec4(cp.feedrate_z))
+            gcs.out("G01 Z" + gcs.dec4(z))
+            # Mill to each point in the list
+            for p in range(1, len(mill_points)):
+                gcs.out("G01 F" + gcs.dec4(cp.feedrate_xy))
+                gcs.out("G01 X" + gcs.dec4(mill_points[p][0]) + " Y" + gcs.dec4(mill_points[p][1]))
+            pass_number = pass_number + 1
+        # Pull the tool out of the piece
+        gcs.out("G01 F" + gcs.dec4(cp.feedrate_z_out))
+        gcs.out("G00 Z" + gcs.dec4(cp.travel_z))
+
+    # Pull out the tool at the end of the work
+    gcs.comment("Park")
+    gcs.out("G00 Z" + gcs.dec4(cp.safe_z))
+    gcs.out("M05")
+    gcs.close()
+
+
+def generate_gcode_clear_zone(event):
+
+    print("Generating GCODE for clearing zone")
 
     z = depth
 
-    # gcs = GcodeStream("/tmp/pi4/out.nc")
-    gcs = GcodeStream("./out.gcode")
+    gcs = GcodeStream(out_file)
     gcs.comment("SCAM G-Code Generator")
     gcs.comment("Bruce MacKinnon KC1FSZ")
+    gcs.comment("Tool size is " + str(tool_size_mm))
     # Units in mm
     gcs.out("G21")
     # Absolute distance mode
@@ -307,7 +375,8 @@ c.bind("<Shift-ButtonPress-1>", shift_down)
 root.bind("<BackSpace>", delete_key)
 root.bind("s", dump_list)
 root.bind("f", toggle_fill)
-root.bind("g", generate_gcode)
+#root.bind("g", generate_gcode_clear_zone)
+root.bind("g", generate_gcode_remove)
 c.pack()
 
 load_list()

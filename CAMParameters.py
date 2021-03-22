@@ -12,8 +12,10 @@ class CAMParameters:
     # Changed this from 70 on 9-Nov-2020
     feedrate_xy = 120
     safe_z = 10
-    board_w = 140
-    board_h = 78
+    # The highest possible Z location
+    highest_z = 28
+    board_w = 100
+    board_h = 70
     passes = 3
     # The size (mm) of the corner area to avoid
     corner_sie = 8

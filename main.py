@@ -17,11 +17,14 @@ from Components.Trace import Trace
 from Components.DBM import DBM
 from Components.SC70 import SC70
 from Components.SC70a import SC70a
+from Components.SOT23 import SOT23
+from Components.SOT23_6a import SOT23_6a
 from Components.GALI3_Biased import GALI3_Biased
 from Components.PA_1 import PA_1
 from Components.PA_2 import PA_2
 from Components.PA_3 import PA_3
 from Components.PA_4 import PA_4
+from Components.IRF510 import IRF510
 
 from GcodeStream import GcodeStream
 from CAMParameters import CAMParameters
@@ -157,27 +160,100 @@ e.add((10, 50), Trace(60, 5, rotation_ccw=0))
 
 e.add((10, 58), Grid(2, 1))
 """
+"""
 # -----------------------------------------------------------------
 # Power Amp Output
 
-#e.add((0, 5), PA_4())
+e.add((30, 55), Grid(2, 1))
+e.add((40, 25), FeedbackAmp())
+e.add((10, 25), FeedbackAmp())
+
+# Variable pot
+e.add((60, 50), DIP(8, True))
+# LM358
+e.add((35, 10), DIP(8, True))
+e.add((30, 2), Grid(2, 1))
+
+e.add((75, 5), Grid(2, 4))
+e.add((85, 35), IRF510())
+"""
 
 # -----------------------------------------------------------------
-# WA2EBY Power Amp Output
+# Driver
+"""
+e.add((15, 55), Grid(2, 1))
+e.add((50, 55), Grid(2, 1))
 
-rects = []
-rects.append(Rectangle(s(22, 14), s(74, 17)))
-rects.append(Rectangle(s(22, 14), s(24, 31)))
-rects.append(Rectangle(s(22, 23), s(70, 25)))
-rects.append(Rectangle(s(22, 23), s(31, 31)))
-rects.append(Rectangle(s(22, 29), s(70, 31)))
-rects.append(Rectangle(s(42, 23), s(53, 31)))
+e.add((75, 50), Grid(2, 2))
+e.add((40, 20), FeedbackAmp())
+e.add((5, 20), FeedbackAmp())
+
+e.add((80, 5), Grid(2, 4))
+e.add((85, 35), IRF510())
+"""
+"""
+# ---- Mic Amp and Balanced Modulator
+# Build on 3/17/2021, works well
+
+# Mic Amp
+e.add((10, 30), Grid(2, 2))
+e.add((10, 20.5), SC70a(rotation_ccw=0))
+e.add((10, 5), Grid(2, 2))
+
+# Balanced Modulator
+e.add((32, 20), Grid(2, 3))
+e.add((47, 24), SOT23(rotation_ccw=0))
+
+# Pad
+e.add((60, 15), Grid(2, 2))
+
+# IF AMP
+e.add((32+12, 5), Grid(2, 1))
+e.add((32, 5), Grid(2, 2))
+"""
+"""
+# ---- Bi-Directional Crystal Filter and IF Amp
+# Built on 3/21/2021, works well
+
+# Left Amp
+e.add((7, 22), Grid(2, 2))
+e.add((7+12, 22), Grid(2, 1))
+
+e.add((7, 5), SOT23_6a(rotation_ccw=0))
+e.add((35-6, 9), Grid(7, 1))
+e.add((93, 18), SOT23_6a(rotation_ccw=180))
+
+# Right Amp
+e.add((73, 22), Grid(2, 2))
+e.add((73+12, 22), Grid(2, 1))
+"""
+
+# ---- Bi-Directional Mixer and IF Amp
+# Built on 3/21/2021, works well
+
+# Left Amp
+e.add((9, 20), Grid(2, 2))
+e.add((9+12, 20), Grid(2, 1))
+
+# Left pad
+e.add((2, 10), Grid(2, 1))
+
+# Left switch
+e.add((14, 3), SOT23_6a(rotation_ccw=0))
+e.add((37, 8), ADE1())
+# LO pad
+e.add((46, 20), Grid(1, 2))
+# Right Switch
+e.add((85, 16), SOT23_6a(rotation_ccw=180))
+
+# Right Amp
+e.add((77, 20), Grid(2, 2))
+e.add((77-12, 26), Grid(2, 1))
+
+# Right pad
+e.add((85, 10), Grid(2, 1))
 
 
-
-
-for rect in rects:
-    e.add((0, 0), rect)
 
 # -----------------------------------------------------------------
 # Draw on the screen
@@ -186,8 +262,8 @@ e.render(c, 0, 0, "#ffffff", render_params)
 c.pack()
 
 # Generate g-code onto the lab computer for milling
-#gcs = GcodeStream("/tmp/pi4/out.nc")
-gcs = GcodeStream("./out.nc")
+gcs = GcodeStream("/tmp/pi4/out.nc")
+#gcs = GcodeStream("./out.nc")
 gcs.comment("SCAM G-Code Generator")
 gcs.comment("Bruce MacKinnon KC1FSZ")
 # Units in mm
@@ -202,9 +278,11 @@ gcs.out("M03 S10000")
 cp = CAMParameters()
 e.mill(gcs, 0, 0, depth, cp)
 
-# Pull out the tool at the end of the work
+# Pull out the tool at the end of the work (center of the board)
 gcs.comment("Park")
-gcs.out("G00 Z" + gcs.dec4(cp.safe_z))
+gcs.out("G00 Z" + gcs.dec4(cp.highest_z))
+gcs.out("G00 X" + gcs.dec4(cp.board_w / 2.0) + " Y" + gcs.dec4(cp.board_h / 2.0))
+# Spindle stop
 gcs.out("M05")
 gcs.close()
 

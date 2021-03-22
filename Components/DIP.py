@@ -10,7 +10,7 @@ from utils import *
 class DIP(Compound):
     # A common component used to create the layout for a DIP package
     pitch_mm = 2.54
-    width_mm = 25
+    width_mm = 30
 
     def __init__(self, pins=8, ground_pin=False, rotation_ccw=0):
         super().__init__()
