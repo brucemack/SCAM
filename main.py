@@ -19,6 +19,7 @@ from Components.SC70 import SC70
 from Components.SC70a import SC70a
 from Components.SOT23 import SOT23
 from Components.SOT23_6a import SOT23_6a
+from Components.SOT23_6c import SOT23_6c
 from Components.GALI3_Biased import GALI3_Biased
 from Components.PA_1 import PA_1
 from Components.PA_2 import PA_2
@@ -211,23 +212,25 @@ e.add((60, 15), Grid(2, 2))
 e.add((32+12, 5), Grid(2, 1))
 e.add((32, 5), Grid(2, 2))
 """
+
 """
 # ---- Bi-Directional Crystal Filter and IF Amp
 # Built on 3/21/2021, works well
 
 # Left Amp
-e.add((7, 22), Grid(2, 2))
-e.add((7+12, 22), Grid(2, 1))
+e.add((7, 20), Grid(2, 2))
+e.add((7+12, 20), Grid(2, 1))
 
-e.add((7, 5), SOT23_6a(rotation_ccw=0))
-e.add((35-6, 9), Grid(7, 1))
-e.add((93, 18), SOT23_6a(rotation_ccw=180))
+e.add((7, 3), SOT23_6a(rotation_ccw=0))
+e.add((35-6, 7), Grid(7, 1))
+e.add((93, 16), SOT23_6a(rotation_ccw=180))
 
 # Right Amp
-e.add((73, 22), Grid(2, 2))
-e.add((73+12, 22), Grid(2, 1))
+e.add((73, 20), Grid(2, 2))
+e.add((73+12, 20), Grid(2, 1))
 """
 
+"""
 # ---- Bi-Directional Mixer and IF Amp
 # Built on 3/21/2021, works well
 
@@ -252,7 +255,55 @@ e.add((77-12, 26), Grid(2, 1))
 
 # Right pad
 e.add((85, 10), Grid(2, 1))
+"""
 
+"""
+# ---- Audio I/O board and modulator
+# Built on 3/27/21, works well
+
+e.add((10, 2), SOT23_6c())
+e.add((30, 2), AmpLM386())
+# Pre-Amp
+e.add((70, 2), Grid(3, 2))
+
+# Balanced Modulator
+e.add((72, 18), Grid(2, 3))
+e.add((87, 21), Grid(1, 3))
+
+# +5V Transmit
+e.add((48, 32), Trace(20, 5, rotation_ccw=0))
+# +5V Receive
+e.add((25, 32), Trace(20, 5, rotation_ccw=0))
+"""
+
+"""
+# ---- Band pass filter and amplifier
+# Built on 4/1/21, works well
+
+# BFP LC
+e.add((16-12, 11), Grid(4, 1))
+# Amp
+e.add((40-12, 5), Grid(2, 2))
+e.add((52-12, 5), Grid(2, 1))
+# Amp
+e.add((55, 5), Grid(2, 2))
+e.add((67, 5), Grid(2, 1))
+"""
+
+# ----- Two-band band pass filter -----
+
+# Left switch 0
+e.add((5, 9.6), SOT23_6a(rotation_ccw=0))
+# Left switch 1
+e.add((45, 22), SOT23_6a(rotation_ccw=180))
+# Top filter
+e.add((40, 17.5), Grid(3, 1))
+# Bottom filter
+e.add((40, 8), Grid(3, 1))
+# Right switch
+e.add((53, 9.6), SOT23_6a(rotation_ccw=0))
+# Left switch 1
+e.add((93, 22), SOT23_6a(rotation_ccw=180))
 
 
 # -----------------------------------------------------------------
