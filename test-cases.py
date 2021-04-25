@@ -2,6 +2,7 @@ import unittest
 import math
 from utils import *
 
+
 class TestCases(unittest.TestCase):
 
     def test_rotate(self):
@@ -25,6 +26,7 @@ class TestCases(unittest.TestCase):
         result = mill_calc_h(bl, tr, tool_mm)
         self.assertEqual(2, len(result))
         print(result)
+
 
 if __name__ == '__main__':
     unittest.main()

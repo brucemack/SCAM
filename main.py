@@ -26,6 +26,7 @@ from Components.PA_2 import PA_2
 from Components.PA_3 import PA_3
 from Components.PA_4 import PA_4
 from Components.IRF510 import IRF510
+from Components.Multitrace import Multitrace
 
 from GcodeStream import GcodeStream
 from CAMParameters import CAMParameters
@@ -289,7 +290,7 @@ e.add((52-12, 5), Grid(2, 1))
 e.add((55, 5), Grid(2, 2))
 e.add((67, 5), Grid(2, 1))
 """
-
+"""
 # ----- Two-band band pass filter -----
 
 # Left switch 0
@@ -304,6 +305,13 @@ e.add((40, 8), Grid(3, 1))
 e.add((53, 9.6), SOT23_6a(rotation_ccw=0))
 # Left switch 1
 e.add((93, 22), SOT23_6a(rotation_ccw=180))
+"""
+
+# ---- Testing multitrace
+
+e.add((10, 10), Grid(2, 2))
+points = [(25, 13), (25, 45), (55, 45), (65, 25)]
+e.add((0, 0), Multitrace(points))
 
 
 # -----------------------------------------------------------------
@@ -313,8 +321,8 @@ e.render(c, 0, 0, "#ffffff", render_params)
 c.pack()
 
 # Generate g-code onto the lab computer for milling
-gcs = GcodeStream("/tmp/pi4/out.nc")
-#gcs = GcodeStream("./out.nc")
+#gcs = GcodeStream("/tmp/pi4/out.nc")
+gcs = GcodeStream("./out.nc")
 gcs.comment("SCAM G-Code Generator")
 gcs.comment("Bruce MacKinnon KC1FSZ")
 # Units in mm
