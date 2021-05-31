@@ -27,6 +27,8 @@ from Components.PA_3 import PA_3
 from Components.PA_4 import PA_4
 from Components.IRF510 import IRF510
 from Components.Multitrace import Multitrace
+from Components.PlesseyBilatteral import PlesseyBilatteral
+from Components.Poly import Poly
 
 from GcodeStream import GcodeStream
 from CAMParameters import CAMParameters
@@ -307,11 +309,117 @@ e.add((53, 9.6), SOT23_6a(rotation_ccw=0))
 e.add((93, 22), SOT23_6a(rotation_ccw=180))
 """
 
+"""
 # ---- Testing multitrace
 
 e.add((10, 10), Grid(2, 2))
 points = [(25, 13), (25, 45), (55, 45), (65, 25)]
 e.add((0, 0), Multitrace(points))
+"""
+
+"""
+# ----- Cyrstal Filter and Bi-Directional Amps
+# Plessy bilateral amp #1
+bx = 5
+by = 5
+e.add((bx + 18, by +  0), Grid(1, 1))
+e.add((bx +  0, by +  6), Grid(2, 1))
+e.add((bx +  6, by + 12), Trace(12, 6, rotation_ccw=0))
+e.add((bx + 18, by + 12), Grid(1, 1))
+e.add((bx +  6, by + 18), Grid(3, 1))
+points = [(bx + 9, by + 27), (bx + 33, by + 27), (bx + 33, by + 3), (bx + 21, by + 3)]
+e.add((0, 0), Multitrace(points, trace_size=6))
+
+# Plessy bilateral amp #2
+bx = 60
+by = 5
+e.add((bx + 18, by +  0), Grid(1, 1))
+e.add((bx +  0, by +  6), Grid(2, 1))
+e.add((bx +  6, by + 12), Trace(12, 6, rotation_ccw=0))
+e.add((bx + 18, by + 12), Grid(1, 1))
+e.add((bx +  6, by + 18), Grid(3, 1))
+points = [(bx + 9, by + 27), (bx + 33, by + 27), (bx + 33, by + 3), (bx + 21, by + 3)]
+e.add((0, 0), Multitrace(points, trace_size=6))
+
+# Filter
+e.add((30, 45), Grid(1, 2))
+e.add((36, 45 + 6), Trace(12, 6, rotation_ccw=0))
+e.add((42, 32 + 6), Trace(12, 6, rotation_ccw=0))
+e.add((48, 45 + 6), Trace(12, 6, rotation_ccw=0))
+e.add((54, 32 + 6), Trace(12, 6, rotation_ccw=0))
+e.add((60, 45 + 6), Trace(12, 6, rotation_ccw=0))
+e.add((72, 45), Grid(1, 2))
+"""
+
+"""
+# ----- Multi-bandpass filter -----
+# NOTES:
+# 1. Need a power rail for bottom filter
+# 2. Second row of filter could be narrower
+bx = 35
+by = 10
+e.add((bx + 3, by + 6), Grid(9, 1))
+e.add((bx + 2*6, by + 0), Grid(1, 1))
+e.add((bx + 7*6, by + 0), Grid(1, 1))
+e.add((bx + 3*6, by + 0), Trace(6*4, 6, rotation_ccw=0))
+e.add((bx + 3*6, by - 6), Grid(3, 1))
+
+bx = 35
+by = 40
+e.add((bx + 3, by + 6), Grid(9, 1))
+e.add((bx + 2*6, by + 0), Grid(1, 1))
+e.add((bx + 7*6, by + 0), Grid(1, 1))
+e.add((bx + 3*6, by + 0), Trace(6*4, 6, rotation_ccw=0))
+e.add((bx + 3*6, by - 6), Grid(3, 1))
+
+e.add((3, 22), PlesseyBilatteral())
+
+# 6v bus
+e.add((10, 60), Trace(80, 4, rotation_ccw=0))
+"""
+
+"""
+# ----- 20m rig mixer ------
+e.add((12, 10), ADE1())
+e.add((3, 10), Grid(1, 2))
+e.add((3, 25), Grid(1, 2))
+# LO pad
+e.add((18, 25), Grid(2, 1))
+"""
+
+# ----- Power Distribution Board
+
+# Relay for controlling T6/G, R12, T12
+org = (5, 7)
+points = [(3, 0), (3, 1), (4, 1), (4, 0)]
+e.add(org, Poly(points, pitch_mm=5))
+points = [(4, 0), (4, 1), (5, 1), (5, 0)]
+e.add(org, Poly(points, pitch_mm=5))
+points = [(5, 0), (5, 4), (6, 4), (6, 0)]
+e.add(org, Poly(points, pitch_mm=5))
+points = [(0, 1), (5, 1), (5, 4), (6, 4), (6, 5), (0, 5)]
+e.add(org, Poly(points, pitch_mm=5))
+points = [(0, 6), (6, 6), (6, 9), (0, 9)]
+e.add(org, Poly(points, pitch_mm=5))
+points = [(6, 0), (12, 0), (12, 3), (7, 3), (7, 5), (6, 5)]
+e.add(org, Poly(points, pitch_mm=5))
+points = [(6, 5), (7, 5), (7, 3), (12, 3), (12, 6), (6, 6)]
+e.add(org, Poly(points, pitch_mm=5))
+points = [(6, 6), (12, 6), (12, 9), (6, 9)]
+e.add(org, Poly(points, pitch_mm=5))
+# LM317 regulator
+points = [(0, 9), (1, 9), (1, 10), (0, 10)]
+e.add(org, Poly(points, pitch_mm=5))
+points = [(1, 9), (2, 9), (2, 10), (1, 10)]
+e.add(org, Poly(points, pitch_mm=5))
+
+# Extra for regulators
+e.add((80, 2), Grid(1, 3))
+e.add((80, 25), Grid(1, 3))
+e.add((80, 47), Grid(1, 3))
+
+
+
 
 
 # -----------------------------------------------------------------
@@ -321,8 +429,8 @@ e.render(c, 0, 0, "#ffffff", render_params)
 c.pack()
 
 # Generate g-code onto the lab computer for milling
-#gcs = GcodeStream("/tmp/pi4/out.nc")
-gcs = GcodeStream("./out.nc")
+gcs = GcodeStream("/tmp/pi4/out.nc")
+#gcs = GcodeStream("./out.nc")
 gcs.comment("SCAM G-Code Generator")
 gcs.comment("Bruce MacKinnon KC1FSZ")
 # Units in mm

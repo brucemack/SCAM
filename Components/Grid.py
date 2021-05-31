@@ -8,15 +8,14 @@ from utils import *
 
 
 class Grid(Compound):
-    # A common component used to create the layout for a grid pattern.
-
-    pitch_mm = 6
-
-    def __init__(self, cols, rows, rotation_ccw=0):
+    """ A common component used to create the layout for a grid pattern.
+    """
+    def __init__(self, cols, rows, rotation_ccw=0, pitch_mm=6):
         super().__init__()
         self.cols = cols
         self.rows = rows
         self.rotation_ccw = rotation_ccw
+        self.pitch_mm = pitch_mm
         # Horizontal
         for row in range(self.rows + 1):
             start_point = 0, row * self.pitch_mm
