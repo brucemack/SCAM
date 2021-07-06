@@ -47,27 +47,26 @@ class AmpLM386(Compound):
         self.add(self.NO_OFFSET, Line(start_point, end_point))
 
         # Vertical
-        # self.add(self.NO_OFFSET, Line(0, 4.0 * self.pitch_mm, 0, 6.0 * self.pitch_mm))
         start_point = rotate((0, 4.0 * self.pitch_mm), rotation_ccw)
+        end_point = rotate((0, 5.0 * self.pitch_mm), rotation_ccw)
+        self.add(self.NO_OFFSET, Line(start_point, end_point))
+
+        start_point = rotate((0, 6.0 * self.pitch_mm), rotation_ccw)
         end_point = rotate((0, 10.0 * self.pitch_mm), rotation_ccw)
         self.add(self.NO_OFFSET, Line(start_point, end_point))
 
-        # self.add(self.NO_OFFSET, Line(self.width_mm / 2 , 3.0 * self.pitch_mm, 0, 7.0 * self.pitch_mm))
         start_point = rotate((self.width_mm / 2, 3.0 * self.pitch_mm), rotation_ccw)
         end_point = rotate((self.width_mm / 2, 10.0 * self.pitch_mm), rotation_ccw)
         self.add(self.NO_OFFSET, Line(start_point, end_point))
 
-        # self.add(self.NO_OFFSET, Line(0.5 * self.width_mm, 0 * self.pitch_mm, 0, 3.0 * self.pitch_mm))
         start_point = rotate((self.width_mm / 2, 0.0 * self.pitch_mm), rotation_ccw)
         end_point = rotate((self.width_mm / 2, 3.0 * self.pitch_mm), rotation_ccw)
         self.add(self.NO_OFFSET, Line(start_point, end_point))
 
-        # self.add(self.NO_OFFSET, Line(self.width_mm, 0.0 * self.pitch_mm, 0, 10.0 * self.pitch_mm))
         start_point = rotate((self.width_mm, 0.0 * self.pitch_mm), rotation_ccw)
         end_point = rotate((self.width_mm, 10.0 * self.pitch_mm), rotation_ccw)
         self.add(self.NO_OFFSET, Line(start_point, end_point))
 
-        # self.add(self.NO_OFFSET, Line(1.25 * self.width_mm, 0.0 * self.pitch_mm, 0, 4.0 * self.pitch_mm))
         start_point = rotate((1.25 * self.width_mm, 0.0 * self.pitch_mm), rotation_ccw)
         end_point = rotate((1.25 * self.width_mm, 4.0 * self.pitch_mm), rotation_ccw)
         self.add(self.NO_OFFSET, Line(start_point, end_point))

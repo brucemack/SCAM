@@ -387,7 +387,9 @@ e.add((3, 25), Grid(1, 2))
 e.add((18, 25), Grid(2, 1))
 """
 
+"""
 # ----- Power Distribution Board
+# Built on 5/31/21
 
 # Relay for controlling T6/G, R12, T12
 org = (5, 7)
@@ -417,8 +419,185 @@ e.add(org, Poly(points, pitch_mm=5))
 e.add((80, 2), Grid(1, 3))
 e.add((80, 25), Grid(1, 3))
 e.add((80, 47), Grid(1, 3))
+"""
 
+"""
+# ---- Audio I/O board and modulator
+# WORK IN PROCESS
 
+e.add((3, 60), SOT23_6c(rotation_ccw=270))
+# Audio power amp
+e.add((3, 10), AmpLM386())
+# Pre-Amp
+e.add((40, 10), Grid(3, 2))
+
+# Balanced Modulator
+e.add((72, 18), Grid(2, 3))
+e.add((87, 21), Grid(1, 3))
+
+# +5V Transmit
+e.add((48, 32), Trace(20, 5, rotation_ccw=0))
+# +5V Receive
+e.add((25, 32), Trace(20, 5, rotation_ccw=0))
+"""
+
+"""
+# ----- Full IF Strip -----
+e.add((28, 9), PlesseyBilatteral(rotation_ccw=90))
+e.add((28+33, 9), PlesseyBilatteral(rotation_ccw=90))
+e.add((28+66, 9), PlesseyBilatteral(rotation_ccw=90))
+
+# Crystal Filter
+org = (3, 45)
+e.add((30 - 23, 45 + 2), Grid(1, 2))
+e.add((36 - 23, 45 + 6), Trace(12, 8, rotation_ccw=0))
+e.add((42 - 23, 32 + 8), Trace(12, 8, rotation_ccw=0))
+e.add((48 - 23, 45 + 6), Trace(12, 8, rotation_ccw=0))
+e.add((54 - 23, 32 + 8), Trace(12, 8, rotation_ccw=0))
+e.add((60 - 23, 45 + 6), Trace(12, 8, rotation_ccw=0))
+e.add((72 - 23, 45 + 2), Grid(1, 2))
+
+# Mixer
+e.add((72, 38), ADE1())
+e.add((64, 38), Grid(1, 2))
+e.add((64, 53), Grid(1, 2))
+# LO pad
+e.add((75, 55), Grid(2, 1))
+
+# 6V rail
+e.add((30, 3), Trace(10, 4, rotation_ccw=0))
+# Control rail
+e.add((63, 3), Trace(10, 4, rotation_ccw=0))
+"""
+"""
+# ----- Balanced Modulator/Product Detector ------
+# Uses SMD diode array and SMD 3904 for mic amp
+# Build on 28-June-21.  Works well, but mic gain
+# seems low.
+
+# Mic AMP
+org = (5, 45)
+e.add((org[0] + 0, org[1] + 0), Grid(2, 1))
+e.add((org[0] + 12, org[1] - 6), Grid(1, 2))
+e.add((org[0] + 3, org[1] + 6), Grid(3, 2))
+
+# Output Pre-Amp
+org = (40, 10)
+e.add((org[0] + 0, org[1] + 0), Trace(6 * 2, 6, rotation_ccw=0))
+e.add((org[0] + 0, org[1] + 6), Trace(6 * 3, 6, rotation_ccw=0))
+e.add((org[0] + 0, org[1] + 12), Grid(3, 1))
+# Output Power Amp
+e.add((65, 10), AmpLM386())
+# PD/BM
+org = (5, 20)
+e.add((org[0] + 0, org[1] + 0), Grid(2, 1))
+e.add((org[0] + 18, org[1] + 0), Grid(2, 1))
+e.add((org[0] + 6, org[1] - 12), Grid(1, 2))
+e.add((org[0] + 12, org[1] - 3), Grid(1, 2))
+# Power
+e.add((40, 35), Grid(2, 1))
+"""
+"""
+# ------ Driver and PA ------
+
+# Pre-driver (SMD 3904 feedback AMP)
+org = (12, 5)
+pitch = 6
+e.add((org[0] + 0 * pitch, org[1] + 0 * pitch), Grid(3, 1))
+e.add((org[0] + 0 * pitch, org[1] + 1 * pitch), Trace(2 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 2 * pitch, org[1] + 1 * pitch), Grid(1, 1))
+e.add((org[0] + 0 * pitch, org[1] + 2 * pitch), Grid(3, 1))
+
+org = (0, 35)
+pitch = 6
+# Driver 2N2219
+e.add((org[0] + 1 * pitch, org[1] - 1 * pitch), Grid(1, 3))
+e.add((org[0] + 2.5 * pitch, org[1] - 1 * pitch), Grid(1, 1))
+e.add((org[0] + 2 * pitch, org[1] + 1 * pitch), Trace(2 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 4 * pitch, org[1] + 1 * pitch), Trace(2 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 6 * pitch, org[1] + 1 * pitch), Trace(2 * pitch, 1 * pitch, rotation_ccw=0))
+# 12V
+e.add((org[0] + 1 * pitch, org[1] + 3 * pitch), Trace(3 * pitch, 1 * pitch, rotation_ccw=0))
+# 5V bias (regulator and trimmer)
+e.add((org[0] + 4 * pitch, org[1] + 3 * pitch), Trace(2 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 6 * pitch, org[1] + 2 * pitch), Trace(1 * pitch, 2 * pitch, rotation_ccw=0))
+# PA Drain/Output, including T/R relay
+e.add((org[0] + 13.5 * pitch, org[1] + 2.5 * pitch), Trace(2 * pitch, 2 * pitch, rotation_ccw=0))
+e.add((org[0] + 11 * pitch, org[1] + 2.5 * pitch), Trace(2 * pitch, 2 * pitch, rotation_ccw=0))
+e.add((org[0] + 11 * pitch, org[1] + 0 * pitch), Trace(2 * pitch, 2 * pitch, rotation_ccw=0))
+e.add((org[0] + 11 * pitch, org[1] + -2 * pitch), Trace(2 * pitch, 1.75 * pitch, rotation_ccw=0))
+e.add((org[0] + 9 * pitch, org[1] - 3 * pitch), Trace(4 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 13.5 * pitch, org[1] - 1 * pitch), Trace(1.5 * pitch, 2 * pitch, rotation_ccw=0))
+e.add((org[0] + 13 * pitch, org[1] - 2 * pitch), Trace(3 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 13 * pitch, org[1] - 4 * pitch), Trace(2 * pitch, 2 * pitch, rotation_ccw=0))
+e.add((org[0] + 11 * pitch, org[1] - 4 * pitch), Grid(2, 1))
+"""
+"""
+# ----- Test Pattern
+org = (10, 10)
+e.add((org[0], org[1]), Grid(2, 2))
+org = (30, 35)
+e.add((org[0], org[1]), Grid(2, 2))
+"""
+
+"""
+# ----- Simple Push-Pull BJT With Driver -----
+# Built on 7/5/2021
+org = (5, 10)
+pitch = 6.0
+e.add((org[0] + 3 * pitch, org[1] + 0 * pitch), Grid(2, 1))
+e.add((org[0] + 0 * pitch, org[1] + 1 * pitch), Grid(1, 1))
+e.add((org[0] + 1 * pitch, org[1] + 1 * pitch), Trace(2 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 1 * pitch, org[1] + 2 * pitch), Grid(3, 1))
+e.add((org[0] + 5 * pitch, org[1] + 2 * pitch), Trace(2 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 7 * pitch, org[1] + 2 * pitch), Trace(1 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 2 * pitch, org[1] + 3 * pitch), Grid(2, 1))
+
+org = (46, 5)
+e.add((org[0] + 3 * pitch, org[1] + 0 * pitch), Trace(1 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 0 * pitch, org[1] + 1 * pitch), Trace(1 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 1 * pitch, org[1] + 1 * pitch), Trace(2 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 3 * pitch, org[1] + 2 * pitch), Trace(4 * pitch, 1 * pitch, rotation_ccw=0))
+# Primary tap (bias) and secondary
+e.add((org[0] + 5 * pitch, org[1] + 3.5 * pitch), Grid(3, 1))
+
+org = (46, 25)
+e.add((org[0] + 3 * pitch, org[1] + 0 * pitch), Trace(1 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 0 * pitch, org[1] + 1 * pitch), Trace(1 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 1 * pitch, org[1] + 1 * pitch), Trace(2 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 3 * pitch, org[1] + 2 * pitch), Trace(4 * pitch, 1 * pitch, rotation_ccw=0))
+"""
+org = (5, 10)
+pitch = 6
+e.add((org[0] + 0 * pitch, org[1] + 3 * pitch), Trace(3 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 3 * pitch, org[1] + 2 * pitch), Grid(2, 1))
+e.add((org[0] + 2 * pitch, org[1] + 4 * pitch), Trace(3 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 3 * pitch, org[1] + 5 * pitch), Trace(2 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 3 * pitch, org[1] + 6 * pitch), Trace(2 * pitch, 1 * pitch, rotation_ccw=0))
+#
+e.add((org[0] + 6 * pitch, org[1] + 4 * pitch), Trace(1 * pitch, 1 * pitch, rotation_ccw=0))
+# Base bias
+e.add((org[0] + 8 * pitch, org[1] + 3 * pitch), Trace(2 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 10 * pitch, org[1] + 3 * pitch), Trace(2 * pitch, 1 * pitch, rotation_ccw=0))
+# Emitters
+e.add((org[0] + 13 * pitch, org[1] + 2 * pitch), Trace(1 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 13 * pitch, org[1] + 4 * pitch), Trace(1 * pitch, 1 * pitch, rotation_ccw=0))
+# Collectors
+e.add((org[0] + 16 * pitch, org[1] + 2 * pitch), Trace(3 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 16 * pitch, org[1] + 4 * pitch), Trace(3 * pitch, 1 * pitch, rotation_ccw=0))
+# Last transformer
+e.add((org[0] + 19 * pitch, org[1] + 2 * pitch), Trace(1 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 19 * pitch, org[1] + 4 * pitch), Trace(1 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 21 * pitch, org[1] + 4 * pitch), Trace(1 * pitch, 1 * pitch, rotation_ccw=0))
+# Power #3
+e.add((org[0] + 17 * pitch, org[1] + 6 * pitch), Grid(2, 1))
+
+# Base (bottom)
+points = [(8, 0), (8, 2), (9, 2), (9, 1), (14, 1), (14, 2), (15, 2), (15, 0), (8, 0)]
+e.add(org, Poly(points, pitch_mm=6))
+# Base (top)
+points = [(8, 7), (8, 5), (9, 5), (9, 6), (14, 6), (14, 5), (15, 5), (15, 7), (8, 7)]
+e.add(org, Poly(points, pitch_mm=6))
 
 
 

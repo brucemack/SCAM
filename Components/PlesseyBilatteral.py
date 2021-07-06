@@ -42,7 +42,7 @@ class PlesseyBilatteral(Compound):
         self.add(self.NO_OFFSET, Line(start_point, end_point))
 
         start_point = rotate((2.0 * self.x_pitch_mm, 4.0 * self.y_pitch_mm), rotation_ccw)
-        end_point = rotate((3.0 * self.x_pitch_mm, 4.0 * self.y_pitch_mm), rotation_ccw)
+        end_point = rotate((4.0 * self.x_pitch_mm, 4.0 * self.y_pitch_mm), rotation_ccw)
         self.add(self.NO_OFFSET, Line(start_point, end_point))
 
         start_point = rotate((0.0 * self.x_pitch_mm, 0.0 * self.y_pitch_mm), rotation_ccw)
@@ -82,7 +82,7 @@ class PlesseyBilatteral(Compound):
         self.add(self.NO_OFFSET, Line(start_point, end_point))
 
         start_point = rotate((4.0 * self.x_pitch_mm, 2.0 * self.y_pitch_mm), rotation_ccw)
-        end_point = rotate((4.0 * self.x_pitch_mm, 3.0 * self.y_pitch_mm), rotation_ccw)
+        end_point = rotate((4.0 * self.x_pitch_mm, 4.0 * self.y_pitch_mm), rotation_ccw)
         self.add(self.NO_OFFSET, Line(start_point, end_point))
 
     def render(self, canvas, origin_x_mm, origin_y_mm, color, params):
