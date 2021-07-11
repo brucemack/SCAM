@@ -59,7 +59,7 @@ ppmm = scale * root.winfo_fpixels('1m') * (100 / 70)
 cp = CAMParameters()
 render_params = RenderParameters(ppmm, cp)
 
-depth = -0.25
+depth = -0.20
 c = tk.Canvas(root, bg="#b87333", width=cp.board_w * ppmm, height=cp.board_h * ppmm)
 
 # -----------------------------------------------------------------
@@ -164,6 +164,7 @@ e.add((10, 50), Trace(60, 5, rotation_ccw=0))
 
 e.add((10, 58), Grid(2, 1))
 """
+
 """
 # -----------------------------------------------------------------
 # Power Amp Output
@@ -539,34 +540,12 @@ e.add((org[0], org[1]), Grid(2, 2))
 org = (30, 35)
 e.add((org[0], org[1]), Grid(2, 2))
 """
-
 """
 # ----- Simple Push-Pull BJT With Driver -----
-# Built on 7/5/2021
-org = (5, 10)
-pitch = 6.0
-e.add((org[0] + 3 * pitch, org[1] + 0 * pitch), Grid(2, 1))
-e.add((org[0] + 0 * pitch, org[1] + 1 * pitch), Grid(1, 1))
-e.add((org[0] + 1 * pitch, org[1] + 1 * pitch), Trace(2 * pitch, 1 * pitch, rotation_ccw=0))
-e.add((org[0] + 1 * pitch, org[1] + 2 * pitch), Grid(3, 1))
-e.add((org[0] + 5 * pitch, org[1] + 2 * pitch), Trace(2 * pitch, 1 * pitch, rotation_ccw=0))
-e.add((org[0] + 7 * pitch, org[1] + 2 * pitch), Trace(1 * pitch, 1 * pitch, rotation_ccw=0))
-e.add((org[0] + 2 * pitch, org[1] + 3 * pitch), Grid(2, 1))
-
-org = (46, 5)
-e.add((org[0] + 3 * pitch, org[1] + 0 * pitch), Trace(1 * pitch, 1 * pitch, rotation_ccw=0))
-e.add((org[0] + 0 * pitch, org[1] + 1 * pitch), Trace(1 * pitch, 1 * pitch, rotation_ccw=0))
-e.add((org[0] + 1 * pitch, org[1] + 1 * pitch), Trace(2 * pitch, 1 * pitch, rotation_ccw=0))
-e.add((org[0] + 3 * pitch, org[1] + 2 * pitch), Trace(4 * pitch, 1 * pitch, rotation_ccw=0))
-# Primary tap (bias) and secondary
-e.add((org[0] + 5 * pitch, org[1] + 3.5 * pitch), Grid(3, 1))
-
-org = (46, 25)
-e.add((org[0] + 3 * pitch, org[1] + 0 * pitch), Trace(1 * pitch, 1 * pitch, rotation_ccw=0))
-e.add((org[0] + 0 * pitch, org[1] + 1 * pitch), Trace(1 * pitch, 1 * pitch, rotation_ccw=0))
-e.add((org[0] + 1 * pitch, org[1] + 1 * pitch), Trace(2 * pitch, 1 * pitch, rotation_ccw=0))
-e.add((org[0] + 3 * pitch, org[1] + 2 * pitch), Trace(4 * pitch, 1 * pitch, rotation_ccw=0))
-"""
+# Built on 7/9/2021
+# NEED TO SPLIT THE PUSH/PULL BASE TRACE!
+# NEED TO ADD ANOTHER PAD ON INPUT (FOR Z-MATCH)
+# NEED A TRACE FOR VCC
 org = (5, 10)
 pitch = 6
 e.add((org[0] + 0 * pitch, org[1] + 3 * pitch), Trace(3 * pitch, 1 * pitch, rotation_ccw=0))
@@ -591,15 +570,44 @@ e.add((org[0] + 19 * pitch, org[1] + 4 * pitch), Trace(1 * pitch, 1 * pitch, rot
 e.add((org[0] + 21 * pitch, org[1] + 4 * pitch), Trace(1 * pitch, 1 * pitch, rotation_ccw=0))
 # Power #3
 e.add((org[0] + 17 * pitch, org[1] + 6 * pitch), Grid(2, 1))
-
 # Base (bottom)
 points = [(8, 0), (8, 2), (9, 2), (9, 1), (14, 1), (14, 2), (15, 2), (15, 0), (8, 0)]
 e.add(org, Poly(points, pitch_mm=6))
 # Base (top)
 points = [(8, 7), (8, 5), (9, 5), (9, 6), (14, 6), (14, 5), (15, 5), (15, 7), (8, 7)]
 e.add(org, Poly(points, pitch_mm=6))
+"""
 
-
+# -----------------------------------------------------------------
+# IRF510 Push/Pull.  Intended for 100x70mm board, cut into two parts.
+# Part 1: Gate/Source
+# Part 2: Drain
+#
+org = (28, 10)
+# Gate control for two FETS
+e.add(org, PA_1())
+e.add((org[0], org[1] + 25), PA_1())
+# Pad for input transformer
+org = (3, 30)
+e.add((org[0], org[1]), Grid(1, 1))
+# Output
+org = (50, 0)
+e.add(org, PA_4())
+e.add((org[0] + 35, org[1] + 7), Grid(1, 1))
+# Relay (R40-11D2-12C Latching)
+org = (60, 45)
+pitch = 5.0
+e.add((org[0] + 0 * pitch, org[1] + 0 * pitch), Trace(pitch, 2 * pitch, rotation_ccw=0))
+e.add((org[0] + 1 * pitch, org[1] + 0 * pitch), Trace(0.5 * pitch, 2 * pitch, rotation_ccw=0))
+e.add((org[0] + 1.5 * pitch, org[1] + 0 * pitch), Trace(pitch, 2 * pitch, rotation_ccw=0))
+e.add((org[0] + 2.5 * pitch, org[1] + 0 * pitch), Trace(pitch, 2 * pitch, rotation_ccw=0))
+e.add((org[0] + 3.5 * pitch, org[1] + 0 * pitch), Trace(pitch, 2 * pitch, rotation_ccw=0))
+#
+e.add((org[0] + 0 * pitch, org[1] + 2 * pitch), Trace(pitch, 2 * pitch, rotation_ccw=0))
+e.add((org[0] + 1 * pitch, org[1] + 2 * pitch), Trace(0.5 * pitch, 2 * pitch, rotation_ccw=0))
+e.add((org[0] + 1.5 * pitch, org[1] + 2 * pitch), Trace(pitch, 2 * pitch, rotation_ccw=0))
+e.add((org[0] + 2.5 * pitch, org[1] + 2 * pitch), Trace(pitch, 2 * pitch, rotation_ccw=0))
+e.add((org[0] + 3.5 * pitch, org[1] + 2 * pitch), Trace(pitch, 2 * pitch, rotation_ccw=0))
 
 # -----------------------------------------------------------------
 # Draw on the screen

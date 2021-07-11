@@ -32,30 +32,25 @@ class PA_4(Compound):
         self.line((0, 0.5), (3, 0.5))
         self.line((0, 1.5), (3, 1.5))
 
-        self.line((0, 2), (4, 2))
-        self.line((0, 2.5), (3.5, 2.5))
+        self.line((1.0, 2), (4, 2))
+        self.line((1.0, 2.5), (3.5, 2.5))
 
         self.line((0, 3.0), (3, 3.0))
         self.line((0, 4.0), (3, 4.0))
 
-        self.line((3, 5.0), (3.5, 5.0))
-        self.line((4, 5.0), (4.5, 5.0))
-        self.line((3, 6.0), (4.5, 6.0))
+        self.line((3.5, 5.0), (4.5, 5.0))
+        #self.line((4, 5.0), (4.5, 5.0))
+        self.line((3.5, 6.0), (4.5, 6.0))
 
         # Vertical
         self.line((3, 0.5), (3, 1.5))
         self.line((3, 3), (3, 4))
         self.line((3.5, 2.5), (3.5, 5.0))
         self.line((4, 2.0), (4, 5.0))
-        self.line((3, 5), (3, 6))
+        self.line((3.5, 5), (3.5, 6))
         self.line((4.5, 5), (4.5, 6))
 
-        self.square((6.5, 0.5), (1, 1))
-        self.square((8.0, 0.5), (0.5, 0.5))
-        self.square((7, 2.5), (0.5, 0.5))
-        self.square((7, 4.0), (0.5, 0.5))
-        self.square((7, 5.5), (0.5, 0.5))
-        self.square((8, 5.5), (0.5, 0.5))
+        self.line((1.0, 2), (1.0, 2.5))
 
     def render(self, canvas, origin_x_mm, origin_y_mm, color, params):
         # Normal renedering process

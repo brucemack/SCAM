@@ -14,9 +14,9 @@ class CAMParameters:
     safe_z = 10
     # The highest possible Z location
     highest_z = 28
-    board_w = 150
-    board_h = 100
-    passes = 3
+    board_w = 100
+    board_h = 70
+    passes = 2
 
 
     # The size (mm) of the corner area to avoid
