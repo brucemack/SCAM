@@ -59,7 +59,7 @@ ppmm = scale * root.winfo_fpixels('1m') * (100 / 70)
 cp = CAMParameters()
 render_params = RenderParameters(ppmm, cp)
 
-depth = -0.20
+depth = -0.25
 c = tk.Canvas(root, bg="#b87333", width=cp.board_w * ppmm, height=cp.board_h * ppmm)
 
 # -----------------------------------------------------------------
@@ -577,7 +577,7 @@ e.add(org, Poly(points, pitch_mm=6))
 points = [(8, 7), (8, 5), (9, 5), (9, 6), (14, 6), (14, 5), (15, 5), (15, 7), (8, 7)]
 e.add(org, Poly(points, pitch_mm=6))
 """
-
+"""
 # -----------------------------------------------------------------
 # IRF510 Push/Pull.  Intended for 100x70mm board, cut into two parts.
 # Part 1: Gate/Source
@@ -608,6 +608,76 @@ e.add((org[0] + 1 * pitch, org[1] + 2 * pitch), Trace(0.5 * pitch, 2 * pitch, ro
 e.add((org[0] + 1.5 * pitch, org[1] + 2 * pitch), Trace(pitch, 2 * pitch, rotation_ccw=0))
 e.add((org[0] + 2.5 * pitch, org[1] + 2 * pitch), Trace(pitch, 2 * pitch, rotation_ccw=0))
 e.add((org[0] + 3.5 * pitch, org[1] + 2 * pitch), Trace(pitch, 2 * pitch, rotation_ccw=0))
+"""
+"""
+# -----------------------------------------------------------------
+# Driver and pre-driver using parallel 2N3904 (ala uBitx)
+
+pitch = 6.0
+
+# Pre-driver #1 (SMD 3904 feedback AMP)
+org = (5, 17)
+pitch = 6
+e.add((org[0] + 0 * pitch, org[1] + 0 * pitch), Grid(3, 1))
+e.add((org[0] + 0 * pitch, org[1] + 1 * pitch), Trace(2 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 2 * pitch, org[1] + 1 * pitch), Grid(1, 1))
+e.add((org[0] + 0 * pitch, org[1] + 2 * pitch), Grid(3, 1))
+e.add((org[0] + 0 * pitch, org[1] - 1 * pitch), Grid(1, 1))
+
+# Pre-driver #2 (parallel 2N3904 in class A)
+org = (23, 12)
+e.add((org[0] + 2 * pitch, org[1] + 0 * pitch), Trace(1 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 4 * pitch, org[1] + 0 * pitch), Trace(1 * pitch, 1 * pitch, rotation_ccw=0))
+#e.add((org[0] + 0 * pitch, org[1] + 1 * pitch), Trace(1 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 1 * pitch, org[1] + 1 * pitch), Trace(4 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 1 * pitch, org[1] + 2 * pitch), Trace(4 * pitch, 1 * pitch, rotation_ccw=0))
+# Input pad
+e.add((org[0] + 0.5 * pitch, org[1] + 0 * pitch), Trace(1 * pitch, 1 * pitch, rotation_ccw=0))
+
+# Collector power
+e.add((47, 33), Grid(1, 2))
+
+org = (56, 4)
+e.add((org[0] + 2 * pitch, org[1] + 0 * pitch), Trace(1 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 4 * pitch, org[1] + 0 * pitch), Trace(1 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 0 * pitch, org[1] + 1 * pitch), Trace(1 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 1 * pitch, org[1] + 1 * pitch), Trace(4 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 1 * pitch, org[1] + 2 * pitch), Trace(4 * pitch, 1 * pitch, rotation_ccw=0))
+
+org = (56, 27)
+e.add((org[0] + 2 * pitch, org[1] + 0 * pitch), Trace(1 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 4 * pitch, org[1] + 0 * pitch), Trace(1 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 0 * pitch, org[1] + 1 * pitch), Trace(1 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 1 * pitch, org[1] + 1 * pitch), Trace(4 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 1 * pitch, org[1] + 2 * pitch), Trace(4 * pitch, 1 * pitch, rotation_ccw=0))
+
+# Collector power
+e.add((88, 33), Grid(1, 2))
+
+# Output
+e.add((88, 17), Grid(1, 2))
+"""
+
+# -----------------------------------------------------------------
+# Driver and pre-driver using parallel 2N3904 (ala uBitx)
+
+# TIA amplifier
+org = (10, 28)
+pitch = 6.0
+e.add((org[0], org[1] - 2), Trace(6 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0] + 6 * pitch, org[1] - 2), Trace(1 * pitch, 1 * pitch, rotation_ccw=0))
+e.add((org[0], org[1] - 10), Grid(2, 1))
+e.add((org[0], org[1] - 22), Trace(1 * pitch, 2 * pitch, rotation_ccw=0))
+e.add((org[0] + 6, org[1] - 22), Grid(2, 1))
+e.add((org[0] + 18, org[1] - 16), Grid(1, 1))
+e.add((org[0] + 30, org[1] - 16), Grid(3, 1))
+
+# Mixer
+org = (68, 6)
+pitch = 6
+e.add((org[0] + 0 * pitch, org[1] + 0 * pitch), Grid(4, 4))
+
+
 
 # -----------------------------------------------------------------
 # Draw on the screen
