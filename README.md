@@ -13,3 +13,11 @@ Design:
 Output board:
 
 ![Alt](docs/img1.jpg)
+
+Commands
+========
+
+Transfer to milling machine:
+
+        rsync -avzh out.nc bruce@192.168.8.80:/tmp
+
