@@ -37,10 +37,10 @@ class Line(Element):
                 hold = start_point
                 start_point = end_point
                 end_point = hold
-            # Position the tool at the start (Rapid)
-            gcode_stream.out("G00 X" + gcode_stream.dec4(start_point[0]) + " Y" +
+            # Position the tool at the start (Slow)
+            gcode_stream.out("G01 X" + gcode_stream.dec4(start_point[0]) + " Y" +
                              gcode_stream.dec4(start_point[1]))
-            # Put the tool into the piece
+            # Put the tool into the piece (Rapid)
             gcode_stream.out("G01 F" + gcode_stream.dec4(params.feedrate_z))
             gcode_stream.out("G01 Z" + gcode_stream.dec4(z))
             # Mill to the end point

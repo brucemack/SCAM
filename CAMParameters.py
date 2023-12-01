@@ -16,7 +16,7 @@ class CAMParameters:
     highest_z = 28
     board_w = 100
     board_h = 70
-    passes = 3
+    passes = 2
 
 
     # The size (mm) of the corner area to avoid

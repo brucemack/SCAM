@@ -59,7 +59,7 @@ ppmm = scale * root.winfo_fpixels('1m') * (100 / 70)
 cp = CAMParameters()
 render_params = RenderParameters(ppmm, cp)
 
-depth = -0.25
+depth = -0.20
 c = tk.Canvas(root, bg="#b87333", width=cp.board_w * ppmm, height=cp.board_h * ppmm)
 
 # -----------------------------------------------------------------
@@ -703,6 +703,8 @@ gcs.out("G21")
 gcs.out("G90")
 # Units per minute feed rate mode
 gcs.out("G94")
+gcs.comment("Lift for safe movement")
+gcs.out("G00 Z" + gcs.dec4(10))
 # Spindle speed
 gcs.out("M03 S10000")
 
