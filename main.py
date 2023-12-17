@@ -679,12 +679,51 @@ e.add((org[0] + 0 * pitch, org[1] + 0 * pitch), Grid(4, 4))
 """
 
 # ---- Sudden Storm Receiver ----------------------------------------
+#
+#e.add((5, 55), Grid(4, 1, 0))
+#e.add((4, 20), Grid(2, 4, 0))
+#e.add((20, 40), DIP(8, False, rotation_ccw=0))#
+#e.add((25, 35), DIP(8, True, rotation_ccw=270)#)
+#e.add((40, 10), Grid(2, 4, 0))
 
-e.add((5, 55), Grid(4, 1, 0))
-e.add((4, 20), Grid(2, 4, 0))
-e.add((20, 40), DIP(8, False, rotation_ccw=0))
-e.add((25, 35), DIP(8, True, rotation_ccw=270))
-e.add((40, 10), Grid(2, 4, 0))
+# ------ PA Board --------------------------------------------------
+# Low power
+e.add((10, 35), Grid(1, 6, 0, pitch_mm=5))
+
+# Relay stuff
+#e.add((15, 5),  Grid(1, 1, 0, pitch_mm=5))
+e.add((10, 15), Grid(1, 1, 0, pitch_mm=5))
+e.add((15, 25), Grid(1, 1, 0, pitch_mm=5))
+e.add((30, 5),  Grid(1, 1, 0, pitch_mm=5))
+e.add((30, 25), Grid(1, 1, 0, pitch_mm=5))
+
+#e.add((80, 5),  Grid(1, 1, 0, pitch_mm=5))
+e.add((85, 15), Grid(1, 1, 0, pitch_mm=5))
+e.add((80, 25), Grid(1, 1, 0, pitch_mm=5))
+e.add((65, 5),  Grid(1, 1, 0, pitch_mm=5))
+e.add((65, 25), Grid(1, 1, 0, pitch_mm=5))
+
+# Pots
+e.add((20, 45), Grid(1, 1, 0, pitch_mm=5))
+e.add((35, 40), Grid(1, 1, 0, pitch_mm=5))
+e.add((20, 60), Grid(1, 1, 0, pitch_mm=5))
+e.add((35, 55), Grid(1, 1, 0, pitch_mm=5))
+
+# IRF510 Connectors
+e.add((50, 60), Grid(1, 1, 0, pitch_mm=5))
+e.add((50, 50), Grid(1, 1, 0, pitch_mm=5))
+e.add((50, 40), Grid(1, 1, 0, pitch_mm=5))
+e.add((50, 30), Grid(1, 1, 0, pitch_mm=5))
+
+# Pad
+e.add((40, 15), Grid(1, 2, 0, pitch_mm=5))
+
+# High Power
+#e.add((55, 5), Grid(1, 4, 0, pitch_mm=5))
+e.add((55, 5), Trace(5, 20))
+
+# Extra
+e.add((70, 60), Grid(4, 1, 0, pitch_mm=5))
 
 # -----------------------------------------------------------------
 # Draw on the screen
