@@ -689,41 +689,39 @@ e.add((org[0] + 0 * pitch, org[1] + 0 * pitch), Grid(4, 4))
 # ------ PA Board --------------------------------------------------
 # Low power
 e.add((10, 35), Grid(1, 6, 0, pitch_mm=5))
+e.add((5, 55), Grid(1, 1, 0, pitch_mm=5))
 
 # Relay stuff
-#e.add((15, 5),  Grid(1, 1, 0, pitch_mm=5))
-e.add((10, 15), Grid(1, 1, 0, pitch_mm=5))
-e.add((15, 25), Grid(1, 1, 0, pitch_mm=5))
-e.add((30, 5),  Grid(1, 1, 0, pitch_mm=5))
-e.add((30, 25), Grid(1, 1, 0, pitch_mm=5))
-
-#e.add((80, 5),  Grid(1, 1, 0, pitch_mm=5))
 e.add((85, 15), Grid(1, 1, 0, pitch_mm=5))
 e.add((80, 25), Grid(1, 1, 0, pitch_mm=5))
-e.add((65, 5),  Grid(1, 1, 0, pitch_mm=5))
+# Was Y=5, moved up
+e.add((65, 7),  Grid(1, 1, 0, pitch_mm=5))
 e.add((65, 25), Grid(1, 1, 0, pitch_mm=5))
 
 # Pots
+# Bottom
 e.add((20, 45), Grid(1, 1, 0, pitch_mm=5))
 e.add((35, 40), Grid(1, 1, 0, pitch_mm=5))
+# Top
 e.add((20, 60), Grid(1, 1, 0, pitch_mm=5))
 e.add((35, 55), Grid(1, 1, 0, pitch_mm=5))
 
 # IRF510 Connectors
-e.add((50, 60), Grid(1, 1, 0, pitch_mm=5))
-e.add((50, 50), Grid(1, 1, 0, pitch_mm=5))
-e.add((50, 40), Grid(1, 1, 0, pitch_mm=5))
-e.add((50, 30), Grid(1, 1, 0, pitch_mm=5))
+e.add((50, 60), Grid(2, 1, 0, pitch_mm=5))
+e.add((55, 55), Trace(15, 5))
+e.add((50, 40), Grid(2, 1, 0, pitch_mm=5))
+e.add((55, 35), Trace(15, 5))
 
 # Pad
-e.add((40, 15), Grid(1, 2, 0, pitch_mm=5))
+e.add((20, 5), Grid(1, 1, 0, pitch_mm=5))
+e.add((20, 25), Grid(1, 1, 0, pitch_mm=5))
+
+# +12 V Power
+e.add((55, 5), Trace(5, 20))
+e.add((45, 5), Grid(1, 4, 0, pitch_mm=5))
 
 # High Power
-#e.add((55, 5), Grid(1, 4, 0, pitch_mm=5))
-e.add((55, 5), Trace(5, 20))
-
-# Extra
-e.add((70, 60), Grid(4, 1, 0, pitch_mm=5))
+e.add((75, 60), Grid(3, 1, 0, pitch_mm=5))
 
 # -----------------------------------------------------------------
 # Draw on the screen
