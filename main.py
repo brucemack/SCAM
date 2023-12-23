@@ -59,7 +59,8 @@ ppmm = scale * root.winfo_fpixels('1m') * (100 / 70)
 cp = CAMParameters()
 render_params = RenderParameters(ppmm, cp)
 
-depth = -0.20
+# Was -0.20
+depth = -0.15
 c = tk.Canvas(root, bg="#b87333", width=cp.board_w * ppmm, height=cp.board_h * ppmm)
 
 # -----------------------------------------------------------------
@@ -686,7 +687,9 @@ e.add((org[0] + 0 * pitch, org[1] + 0 * pitch), Grid(4, 4))
 #e.add((25, 35), DIP(8, True, rotation_ccw=270)#)
 #e.add((40, 10), Grid(2, 4, 0))
 
+"""
 # ------ PA Board --------------------------------------------------
+# Dual IRF510 on 100x70 PCB.  TR relay.
 # Low power
 e.add((10, 35), Grid(1, 6, 0, pitch_mm=5))
 e.add((5, 55), Grid(1, 1, 0, pitch_mm=5))
@@ -722,6 +725,31 @@ e.add((45, 5), Grid(1, 4, 0, pitch_mm=5))
 
 # High Power
 e.add((75, 60), Grid(3, 1, 0, pitch_mm=5))
+"""
+
+# ------ PA Board --------------------------------------------------
+
+# Input trace
+e.add((0 + 0,  10), Trace(10, 2))
+# Output trace
+e.add((0 + 40,  10), Trace(10, 2))
+
+# MMBT3904 1st stage
+e.add((0 + 15,  5), Trace(5, 5))
+e.add((0 + 10, 10), Trace(10, 10))
+e.add((0 + 20,  5), Trace(5, 15))
+
+# +12v
+e.add((0 + 10, 35), Trace(6 * 5, 5))
+e.add((0 + 15, 30), Trace(5, 5))
+
+e.add((0 + 25, 20), Trace(5, 5))
+
+# BD139
+e.add((0 + 30, 10), Trace(5, 5))
+e.add((0 + 30, 15), Trace(5, 10))
+e.add((0 + 35, 10), Trace(5, 15))
+e.add((0 + 40, 15), Trace(5, 5))
 
 # -----------------------------------------------------------------
 # Draw on the screen
