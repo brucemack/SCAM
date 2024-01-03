@@ -687,7 +687,6 @@ e.add((org[0] + 0 * pitch, org[1] + 0 * pitch), Grid(4, 4))
 #e.add((25, 35), DIP(8, True, rotation_ccw=270)#)
 #e.add((40, 10), Grid(2, 4, 0))
 
-"""
 # ------ PA Board --------------------------------------------------
 # Dual IRF510 on 100x70 PCB.  TR relay.
 # Low power
@@ -710,14 +709,23 @@ e.add((20, 60), Grid(1, 1, 0, pitch_mm=5))
 e.add((35, 55), Grid(1, 1, 0, pitch_mm=5))
 
 # IRF510 Connectors
-e.add((50, 60), Grid(2, 1, 0, pitch_mm=5))
-e.add((55, 55), Trace(15, 5))
+e.add((50, 55), Grid(2, 1, 0, pitch_mm=5))
+e.add((55, 50), Trace(15, 5))
 e.add((50, 40), Grid(2, 1, 0, pitch_mm=5))
 e.add((55, 35), Trace(15, 5))
 
+# Input trace (TX)
+e.add((0 + 0,  12), Trace(20, 2))
 # Pad
-e.add((20, 5), Grid(1, 1, 0, pitch_mm=5))
-e.add((20, 25), Grid(1, 1, 0, pitch_mm=5))
+e.add((20, 10), Trace(10, 5))
+e.add((25, 30), Trace(20, 5))
+
+# Input trace (RX)
+e.add((0 + 0,  20), Trace(10, 2))
+e.add((10, 20), Trace(5, 5))
+
+# Output trace
+e.add((90,  15), Trace(10, 2))
 
 # +12 V Power
 e.add((55, 5), Trace(5, 20))
@@ -725,10 +733,10 @@ e.add((45, 5), Grid(1, 4, 0, pitch_mm=5))
 
 # High Power
 e.add((75, 60), Grid(3, 1, 0, pitch_mm=5))
+e.add((75, 42), Trace(15, 5))
+
 """
-
-# ------ PA Board --------------------------------------------------
-
+# ------ BD139 Preamp  --------------------------------------------------
 # Input trace
 e.add((0 + 0,  10), Trace(10, 2))
 # Output trace
@@ -750,6 +758,7 @@ e.add((0 + 30, 10), Trace(5, 5))
 e.add((0 + 30, 15), Trace(5, 10))
 e.add((0 + 35, 10), Trace(5, 15))
 e.add((0 + 40, 15), Trace(5, 5))
+"""
 
 # -----------------------------------------------------------------
 # Draw on the screen
