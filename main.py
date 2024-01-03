@@ -61,7 +61,8 @@ cp = CAMParameters()
 render_params = RenderParameters(ppmm, cp)
 
 # Was -0.20
-depth = -0.15
+#depth = -0.15
+depth = -0.10
 c = tk.Canvas(root, bg="#b87333", width=cp.board_w * ppmm, height=cp.board_h * ppmm)
 
 # -----------------------------------------------------------------
