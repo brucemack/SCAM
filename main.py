@@ -29,6 +29,7 @@ from Components.IRF510 import IRF510
 from Components.Multitrace import Multitrace
 from Components.PlesseyBilatteral import PlesseyBilatteral
 from Components.Poly import Poly
+from Components.LMV321_a import LMV321_a
 
 from GcodeStream import GcodeStream
 from CAMParameters import CAMParameters
@@ -679,14 +680,17 @@ pitch = 6
 e.add((org[0] + 0 * pitch, org[1] + 0 * pitch), Grid(4, 4))
 """
 
+"""
 # ---- Sudden Storm Receiver ----------------------------------------
 #
-#e.add((5, 55), Grid(4, 1, 0))
-#e.add((4, 20), Grid(2, 4, 0))
-#e.add((20, 40), DIP(8, False, rotation_ccw=0))#
-#e.add((25, 35), DIP(8, True, rotation_ccw=270)#)
-#e.add((40, 10), Grid(2, 4, 0))
+e.add((5, 55), Grid(4, 1, 0))
+e.add((4, 20), Grid(2, 4, 0))
+e.add((20, 40), DIP(8, False, rotation_ccw=0))#
+e.add((25, 35), DIP(8, True, rotation_ccw=270)#)
+e.add((40, 10), Grid(2, 4, 0))
+"""
 
+"""
 # ------ PA Board --------------------------------------------------
 # Dual IRF510 on 100x70 PCB.  TR relay.
 # Low power
@@ -734,6 +738,7 @@ e.add((45, 5), Grid(1, 4, 0, pitch_mm=5))
 # High Power
 e.add((75, 60), Grid(3, 1, 0, pitch_mm=5))
 e.add((75, 42), Trace(15, 5))
+"""
 
 """
 # ------ BD139 Preamp  --------------------------------------------------
@@ -759,6 +764,16 @@ e.add((0 + 30, 15), Trace(5, 10))
 e.add((0 + 35, 10), Trace(5, 15))
 e.add((0 + 40, 15), Trace(5, 5))
 """
+
+# ------ LMV321 Array For SCAMP Audio -----------------------------
+e.add((5, 10), LMV321_a())
+e.add((5, 30), LMV321_a())
+
+e.add((50, 10), LMV321_a())
+e.add((50, 30), LMV321_a())
+
+e.add((5, 50), Grid(5, 1, 0, pitch_mm=5))
+e.add((40, 50), Trace(30, 5))
 
 # -----------------------------------------------------------------
 # Draw on the screen
