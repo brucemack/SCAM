@@ -29,6 +29,8 @@ from Components.IRF510 import IRF510
 from Components.Multitrace import Multitrace
 from Components.PlesseyBilatteral import PlesseyBilatteral
 from Components.Poly import Poly
+from Components.LMV321_a import LMV321_a
+from Components.Rule import Rule
 
 from GcodeStream import GcodeStream
 from CAMParameters import CAMParameters
@@ -680,13 +682,15 @@ pitch = 6
 e.add((org[0] + 0 * pitch, org[1] + 0 * pitch), Grid(4, 4))
 """
 
+"""
 # ---- Sudden Storm Receiver ----------------------------------------
 #
-#e.add((5, 55), Grid(4, 1, 0))
-#e.add((4, 20), Grid(2, 4, 0))
-#e.add((20, 40), DIP(8, False, rotation_ccw=0))#
-#e.add((25, 35), DIP(8, True, rotation_ccw=270)#)
-#e.add((40, 10), Grid(2, 4, 0))
+e.add((5, 55), Grid(4, 1, 0))
+e.add((4, 20), Grid(2, 4, 0))
+e.add((20, 40), DIP(8, False, rotation_ccw=0))#
+e.add((25, 35), DIP(8, True, rotation_ccw=270)#)
+e.add((40, 10), Grid(2, 4, 0))
+"""
 
 """
 # ------ PA Board --------------------------------------------------
@@ -711,14 +715,23 @@ e.add((20, 60), Grid(1, 1, 0, pitch_mm=5))
 e.add((35, 55), Grid(1, 1, 0, pitch_mm=5))
 
 # IRF510 Connectors
-e.add((50, 60), Grid(2, 1, 0, pitch_mm=5))
-e.add((55, 55), Trace(15, 5))
+e.add((50, 55), Grid(2, 1, 0, pitch_mm=5))
+e.add((55, 50), Trace(15, 5))
 e.add((50, 40), Grid(2, 1, 0, pitch_mm=5))
 e.add((55, 35), Trace(15, 5))
 
+# Input trace (TX)
+e.add((0 + 0,  12), Trace(20, 2))
 # Pad
-e.add((20, 5), Grid(1, 1, 0, pitch_mm=5))
-e.add((20, 25), Grid(1, 1, 0, pitch_mm=5))
+e.add((20, 10), Trace(10, 5))
+e.add((25, 30), Trace(20, 5))
+
+# Input trace (RX)
+e.add((0 + 0,  20), Trace(10, 2))
+e.add((10, 20), Trace(5, 5))
+
+# Output trace
+e.add((90,  15), Trace(10, 2))
 
 # +12 V Power
 e.add((55, 5), Trace(5, 20))
@@ -726,11 +739,16 @@ e.add((45, 5), Grid(1, 4, 0, pitch_mm=5))
 
 # High Power
 e.add((75, 60), Grid(3, 1, 0, pitch_mm=5))
+e.add((75, 42), Trace(15, 5))
 """
 
 """
+<<<<<<< HEAD
 # ------ PA Drive Board --------------------------------------------------
 
+=======
+# ------ BD139 Preamp  --------------------------------------------------
+>>>>>>> e2e54030fe103918fa236d832a79fd8e8fa40672
 # Input trace
 e.add((0 + 0,  10), Trace(10, 2))
 # Output trace
@@ -753,6 +771,128 @@ e.add((0 + 30, 15), Trace(5, 10))
 e.add((0 + 35, 10), Trace(5, 15))
 e.add((0 + 40, 15), Trace(5, 5))
 """
+"""
+# ------ LMV321 Array For SCAMP Audio -----------------------------
+e.add((5, 10), LMV321_a())
+e.add((5, 30), LMV321_a())
+
+e.add((50, 10), LMV321_a())
+e.add((50, 30), LMV321_a())
+
+e.add((5, 50), Grid(5, 1, 0, pitch_mm=5))
+e.add((40, 50), Trace(30, 5))
+"""
+
+# ------ Receiver Board -------------------------------------------
+
+pitch_mm = 5
+
+# Row 60
+e.add((90, 60), Rule(pitch_mm, 1, 0))
+
+# Row 55
+e.add((10, 55), Rule(pitch_mm, 8, 0))
+e.add((70, 55), Rule(pitch_mm, 2, 0))
+
+# Row 50
+e.add((5, 50), Rule(pitch_mm, 18, 0))
+
+# Row 45
+e.add((10, 45), Rule(pitch_mm, 2, 0))
+e.add((40, 45), Rule(pitch_mm, 2, 0))
+e.add((55, 45), Rule(pitch_mm, 8, 0))
+
+# Row 40
+e.add((10, 40), Rule(pitch_mm, 8, 0))
+e.add((55, 40), Rule(pitch_mm, 3, 0))
+e.add((90, 40), Rule(pitch_mm, 1, 0))
+
+# Row 35
+e.add((10, 35), Rule(pitch_mm, 8, 0))
+e.add((85, 35), Rule(pitch_mm, 1, 0))
+
+# Row 30
+e.add((10, 30), Rule(pitch_mm, 8, 0))
+e.add((90, 30), Rule(pitch_mm, 1, 0))
+
+# Row 25
+e.add((10, 25), Rule(pitch_mm, 8, 0))
+e.add((85, 25), Rule(pitch_mm, 1, 0))
+
+# Row 20
+e.add((5, 20), Rule(pitch_mm, 3, 0))
+e.add((40, 20), Rule(pitch_mm, 3, 0))
+
+# Row 15
+e.add((10, 15), Rule(pitch_mm, 8, 0))
+e.add((90, 15), Rule(pitch_mm, 1, 0))
+
+# Row 10
+e.add((10, 10), Rule(pitch_mm, 8, 0))
+
+# Row 5
+e.add((40, 5), Rule(pitch_mm, 2, 0))
+
+# Col 5
+e.add((5, 20), Rule(pitch_mm, 6, 90))
+
+# Col 10
+e.add((10, 10), Rule(pitch_mm, 9, 90))
+
+# Col 15
+e.add((15, 20), Rule(pitch_mm, 1, 90))
+e.add((15, 45), Rule(pitch_mm, 1, 90))
+
+# Col 20
+e.add((20, 15), Rule(pitch_mm, 2, 90))
+e.add((20, 40), Rule(pitch_mm, 2, 90))
+
+# Col 30
+e.add((30, 15), Rule(pitch_mm, 2, 90))
+e.add((30, 40), Rule(pitch_mm, 2, 90))
+
+# Col 40
+e.add((40, 5), Rule(pitch_mm, 1, 90))
+e.add((40, 15), Rule(pitch_mm, 2, 90))
+e.add((40, 30), Rule(pitch_mm, 1, 90))
+e.add((40, 40), Rule(pitch_mm, 2, 90))
+
+# Col 45
+e.add((45, 5), Rule(pitch_mm, 2, 90))
+e.add((45, 20), Rule(pitch_mm, 1, 90))
+e.add((45, 30), Rule(pitch_mm, 2, 90))
+e.add((45, 45), Rule(pitch_mm, 1, 90))
+
+# Col 50
+e.add((50, 5), Rule(pitch_mm, 10, 90))
+
+# Col 55
+e.add((55, 20), Rule(pitch_mm, 6, 90))
+
+# Col 60
+e.add((60, 40), Rule(pitch_mm, 2, 90))
+
+# Col 65
+e.add((65, 40), Rule(pitch_mm, 2, 90))
+
+# Col 70
+e.add((70, 40), Rule(pitch_mm, 3, 90))
+
+# Col 80
+e.add((80, 45), Rule(pitch_mm, 2, 90))
+
+# Col 85
+e.add((85, 25), Rule(pitch_mm, 5, 90))
+
+# Col 90
+e.add((90, 15), Rule(pitch_mm, 9, 90))
+
+# Col 95
+e.add((95, 15), Rule(pitch_mm, 9, 90))
+
+# Extra grids
+e.add((60, 10), Grid(4, 2, 0, pitch_mm=5))
+
 
 # -----------------------------------------------------------------
 # Draw on the screen
