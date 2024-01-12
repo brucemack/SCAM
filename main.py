@@ -60,7 +60,8 @@ cp = CAMParameters()
 render_params = RenderParameters(ppmm, cp)
 
 # Was -0.20
-depth = -0.15
+#depth = -0.15
+depth = -0.10
 c = tk.Canvas(root, bg="#b87333", width=cp.board_w * ppmm, height=cp.board_h * ppmm)
 
 # -----------------------------------------------------------------
@@ -727,7 +728,8 @@ e.add((45, 5), Grid(1, 4, 0, pitch_mm=5))
 e.add((75, 60), Grid(3, 1, 0, pitch_mm=5))
 """
 
-# ------ PA Board --------------------------------------------------
+"""
+# ------ PA Drive Board --------------------------------------------------
 
 # Input trace
 e.add((0 + 0,  10), Trace(10, 2))
@@ -750,6 +752,7 @@ e.add((0 + 30, 10), Trace(5, 5))
 e.add((0 + 30, 15), Trace(5, 10))
 e.add((0 + 35, 10), Trace(5, 15))
 e.add((0 + 40, 15), Trace(5, 5))
+"""
 
 # -----------------------------------------------------------------
 # Draw on the screen
