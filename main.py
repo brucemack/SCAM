@@ -31,6 +31,10 @@ from Components.PlesseyBilatteral import PlesseyBilatteral
 from Components.Poly import Poly
 from Components.LMV321_a import LMV321_a
 from Components.Rule import Rule
+from Components.NE5532_left_1 import NE5532_left_1
+from Components.NE5532_right_1 import NE5532_right_1
+from Components.NE5532_right_2 import NE5532_right_2
+from Components.LM380 import LM380
 
 from GcodeStream import GcodeStream
 from CAMParameters import CAMParameters
@@ -783,7 +787,9 @@ e.add((5, 50), Grid(5, 1, 0, pitch_mm=5))
 e.add((40, 50), Trace(30, 5))
 """
 
+"""
 # ------ Receiver Board -------------------------------------------
+# J310
 
 pitch_mm = 5
 
@@ -892,7 +898,29 @@ e.add((95, 15), Rule(pitch_mm, 9, 90))
 
 # Extra grids
 e.add((60, 10), Grid(4, 2, 0, pitch_mm=5))
+"""
 
+# ----- AF LPF -----------------------------------------------
+
+# Input grid
+e.add((10, 5), Grid(3, 1, 0, pitch_mm=5))
+
+e.add((5, 10), NE5532_left_1())
+e.add((30, 10), NE5532_right_1())
+
+e.add((5, 25), NE5532_left_1())
+e.add((30, 25), NE5532_right_2())
+
+# LM380
+e.add((5, 40), LM380())
+
+# +12 trace
+e.add((35, 3), Trace(15, 4))
+
+# Output grid
+#e.add((30, 40), Grid(3, 1, 0, pitch_mm=5))
+# +12 trace
+#e.add((5, 40), Trace(15, 5))
 
 # -----------------------------------------------------------------
 # Draw on the screen
